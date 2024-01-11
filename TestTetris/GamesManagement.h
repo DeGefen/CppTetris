@@ -2,7 +2,7 @@
 #ifndef TETRIS_GAMESMANAGEMENT_H
 #define TETRIS_GAMESMANAGEMENT_H
 
-#include "Board.h"
+//#include "Board.h"
 #include "GameMech.h"
 
 class GamesManagement {

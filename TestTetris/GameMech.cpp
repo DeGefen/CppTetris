@@ -59,3 +59,15 @@ void GameMech::drawBorder() {
         }
     }
 }
+
+void GameMech::init(int num)
+{
+}
+
+void GameMech::run()
+{
+}
+
+void GameMech::freeMemory()
+{
+}
