@@ -22,8 +22,8 @@ public:
     void init(int headX, int headY, char type);
 
 protected:
-    int headX = STARTING_X_POSITION;
-    int headY = STARTING_Y_POSITION;
+    int headX;
+    int headY;
     vector<int> cordX;
     vector<int> cordY;
     char type;
