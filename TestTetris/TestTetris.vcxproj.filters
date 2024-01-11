@@ -47,9 +47,6 @@
     <ClInclude Include="Line.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MasterHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ListNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
