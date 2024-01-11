@@ -1,7 +1,7 @@
 #pragma once
 #pragma once
 
-#include "GameMech.h"
+//#include "GameMech.h"
 
 class Point {
 	int x;
