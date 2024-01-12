@@ -62,7 +62,7 @@ Line* Tetromino::convertToLine(int y) {
     tetroLine->setNewLine();
     for (int i = 0; i < NUM_OF_CORDS; ++i) {
         if (headY + cordY[3 * position + i] == y) {
-            tetroLine->arr[headX + cordX[3 * position + i]] = type;
+            tetroLine->arr[headX + cordX[3 * position + i]] = '*';
             ++(tetroLine->countFilled);
         }
     }
@@ -76,9 +76,9 @@ void Tetromino::moveTetro(Board& board, short direction) {
 }
 
 bool Tetromino::placeTetro(Board& board) {
-    --headY;
+    ++headY;
     if (!checkTetroMove(board)) {
-        ++headY;
+        --headY;
         int y = headY;
         Line* tetroLine = convertToLine(y);
         placeTetroAux(board, tetroLine, y);
@@ -117,13 +117,27 @@ void Tetromino::dropTetro(Board& board) {
     placeTetro(board);
 }
 
-void Tetromino::moveDown(Board& board) {
-    if (!placeTetro(board))
-        --headY;
-}
+//void Tetromino::moveDown(Board& board) {
+//    if (!placeTetro(board))
+//        --headY;
+//}
 
-void Tetromino::init(int headX, int headY, char type)
-{
-    this->type = type;
-    //this->position
+void Tetromino::move() {
+    Point p;
+    p.init(headX, headY);
+    p.draw('*', color);
+    for (int i = 0; i < NUM_OF_CORDS; ++i) {
+        p.init(headX+cordX[3 * position + i], headY + cordY[3 * position + i]);
+        p.draw('*', color);
+    }
+};
+
+void Tetromino::erase() {
+    Point p;
+    p.init(headX, headY);
+    p.draw('*', 0x00);
+    for (int i = 0; i < NUM_OF_CORDS; ++i) {
+        p.init(headX + cordX[3 * position + i], headY + cordY[3 * position + i]);
+        p.draw('*', 0x00);
+    }
 };

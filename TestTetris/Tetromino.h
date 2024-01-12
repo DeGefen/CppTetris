@@ -15,6 +15,7 @@ I = #   O = ##   T =  #    J =  #   L = #    S =  ##   Z = ##
 #include <time.h>
 #include <Windows.h>
 #include "point.h"
+#include "Board.h"
 using namespace std;
 
 #define GAME_HEIGHT 18
@@ -24,9 +25,6 @@ using namespace std;
 #define SPACE ' '
 #define NUM_OF_CORDS 3
 
-#include <vector>
-#include "Board.h"
-
 class Tetromino {
 public:
     void rotate(Board& board, short direction);
@@ -34,14 +32,16 @@ public:
     void dropTetro(Board& board);
     bool placeTetro(Board& board);
     void moveDown(Board& board);
-    void init(int headX, int headY, char type);
+    void move();
+    void erase();
 
 protected:
+
     int headX;
     int headY;
     vector<int> cordX;
     vector<int> cordY;
-    char type;
+    short color;
     short position = 0;
     short numOfPositions;
 
@@ -56,7 +56,7 @@ class tetro_I : public Tetromino {
         cordX = { 0,0,0,-1,1,2 };
         cordY = { 1,-1,-2,0,0,0 };
         numOfPositions = 2;
-        type = 'I';
+        color = 0xBB;
     }
 };
 
@@ -65,7 +65,7 @@ class tetro_O : Tetromino {
         cordX = { 1,0,1 };
         cordY = { 0,-1,-1 };
         numOfPositions = 1;
-        type = 'O';
+        color = 0xEE;
     }
 };
 
@@ -74,7 +74,7 @@ class tetro_T : Tetromino {
         cordX = { 0, -1, 1, 0, -1, 0, -1, 1, 0, 0, 0, 1 };
         cordY = { 1, 0, 0, 1, 0, -1, 0, 0, -1, 1, -1, 0 };
         numOfPositions = 4;
-        type = 'T';
+        color = 0x55;
     }
 };
 
@@ -83,7 +83,7 @@ class tetro_J : Tetromino {
         cordX = { 0, 0, -1, -1, 1, 1, 0, 0, 1, 1, -1, -1 };
         cordY = { 1, -1, -1, 0, 0, -1, -1, 1, 1, 0, 0, 1 };
         numOfPositions = 4;
-        type = 'J';
+        color = 0x11;
     }
 };
 
@@ -92,7 +92,7 @@ class tetro_L : Tetromino {
         cordX = { 0, 0, 1, -1, 1, 1, 0, 0, -1, 1, -1, -1 };
         cordY = { 1, -1, -1, 0, 0, 1, -1, 1, 1, 0, 0, -1 };
         numOfPositions = 4;
-        type = 'L';
+        color = 0x66;
     }
 };
 
@@ -101,7 +101,7 @@ class tetro_S : Tetromino {
         cordX = { 1, 0, -1, 0, 1, 1 };
         cordY = { 0, -1, -1, 1, 0, -1 };
         numOfPositions = 2;
-        type = 'S';
+        color = 0xAA;
     }
 };
 
@@ -110,7 +110,7 @@ class tetro_Z : Tetromino {
         cordX = { -1, 0, 1, 0, -1, -1 };
         cordY = { 0, -1, -1, 1, 0, -1 };
         numOfPositions = 2;
-        type = 'Z';
+        color = 0x44;
     }
 };
 
