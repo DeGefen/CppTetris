@@ -3,9 +3,15 @@
 #include "Board.h"
 
 void Board::addToHead(ListNode* node) {
-    head->prev = node;
-    node->next = head;
-    head = node;
+    if (head == nullptr) {
+        head = tail = node;
+    }
+    else
+    {
+        head->prev = node;
+        node->next = head;
+        head = node;
+    }
     nodesCount++;
 }
 void Board::addToTail(ListNode* node) {
@@ -61,4 +67,15 @@ void Board::removeFromIndexes(int i, int j = -1) { // Need to test
         head = curr;
     else
         curr->prev->next = curr;
+}
+
+int Board::count() const {
+    return nodesCount;
+}
+
+void Board::draw() {
+    ListNode* node = tail;
+    while (node->prev != nullptr) {
+
+    }
 }

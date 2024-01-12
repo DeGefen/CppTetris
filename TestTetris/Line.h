@@ -9,11 +9,12 @@ using namespace std;
 #define GAME_HEIGHT 18
 #define GAME_WIDTH 12
 #define SPACE ' '
+#define EMPTY_LINE "            "
 
 
 class Line {
 public:
-    string arr;
+    string arr = EMPTY_LINE;
     unsigned short countFilled = 0;
     void setNewLine();
     void printLine();

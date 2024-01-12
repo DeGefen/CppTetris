@@ -11,14 +11,17 @@
 #endif //TETRIS_Board_H
 
 class Board {
-public:
     ListNode* head;
     ListNode* tail;
     int nodesCount;
+public:
+    Board() { head = nullptr; tail = nullptr; nodesCount = 0; };
     void addToHead(ListNode* node);
     void addToTail(ListNode* node);
     void removeFromTail();
     void removeFromHead();
     ListNode* getNodeFromIndex(int i);
     void removeFromIndexes(int i, int j);
+    int count() const;
+    void draw();
 };
