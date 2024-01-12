@@ -17,7 +17,8 @@ using namespace std;
 
 #define GAME_HEIGHT 18
 #define GAME_WIDTH 12
-#define NUM_OF_CORDS 3
+#define NUM_OF_CORDS 4
+#define NULL_VALUE -1
 
 class Tetromino {
 public:
@@ -35,6 +36,7 @@ private:
     int headY;
     vector<int> cordX;
     vector<int> cordY;
+    char type;
     short color;
     short position = 0;
     short numOfPositions;
