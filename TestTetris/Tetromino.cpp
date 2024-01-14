@@ -1,4 +1,5 @@
 #include "Tetromino.h"
+#include "general.h"
 
 
 void Tetromino::rotate(Board& board, short direction) { // Rotate clockwise (direction = -1), counter-clockwise (direction = 1)
@@ -133,7 +134,7 @@ void Tetromino::draw() {
         int n = NUM_OF_CORDS * position + i;
         if (headY + cordY[n] >= 0) {
             p.init(headX + cordX[n], headY + cordY[n]);
-            p.draw(type, color);
+            p.draw(type);
         }
     }
 };
@@ -144,7 +145,7 @@ void Tetromino::erase() {
         int n = NUM_OF_CORDS * position + i;
         if (headY + cordY[n] >= 0) {
             p.init(headX + cordX[n], headY + cordY[n]);
-            p.draw(' ', 0x00);
+            p.draw(' ');
         }
     }
 };
@@ -157,49 +158,49 @@ void Tetromino::setTetro(int num) {
         cordY = {2,1,0,-1,0,0,0,0 };
         numOfPositions = 2;
         type = 'I';
-        color = 0xBF;
+        color = getColor(type);
         break;
     case 1: // tetro O
         cordX = {1, 0,1,0 };
         cordY = {1, 1,0,0 };
         type = 'O';
         numOfPositions = 1;
-        color = 0xEF;
+        color = getColor(type);
         break;
     case 2: // tetro T
         cordX = {0, 1, -1, 0,   0, 0, -1, 0,   0, -1, 1, 0,   0, 0, 1, 0 };
         cordY = {0, 0, 0, -1,   1, 0, 0, -1,   0, 0, 0, 1,    1, 0, 0, -1 };
         numOfPositions = 4;
         type = 'T';
-        color = 0x5F;
+        color = getColor(type);
         break;
     case 3: // tetro J
         cordX = {0, -1, 0, 0,   1, -1, 1, 0,    0, 0, 0, 1,    0, 1, -1, -1 };
         cordY = {1, 1, 0, -1,   1, 0, 0, 0,    1, 0, -1, -1,    0, 0, 0, -1 };
         numOfPositions = 4;
         type = 'J';
-        color = 0x1F;
+        color = getColor(type);
         break;
     case 4: // tetro L
         cordX = {0, 1, 0, 0,   0, -1, 1, 1,   0, 0, 0, -1,    -1, 1, -1, 0 };
         cordY = {1, 1, 0, -1,   0, 0, 0, -1,   1, 0, -1, -1,   1, 0, 0, 0 };
         numOfPositions = 4;
         type = 'L';
-        color = 0x6F;
+        color = getColor(type);
         break;
     case 5: // tetro S
         cordX = {0, -1, 0, 1,    1, 0, 1, 0 };
         cordY = {1, 1, 0, 0,    1, 0, 0, -1 };
         numOfPositions = 2;
         type = 'S';
-        color = 0xAF;
+        color = getColor(type);
         break;
     case 6: // tetro Z
         cordX = {1, 0, -1, 0,    -1, 0, -1, 0 };
         cordY = {1, 1, 0, 0,    1, 0, 0, -1 };
         numOfPositions = 2;
         type = 'Z';
-        color = 0x4F;
+        color = getColor(type);
         break;
     }
 }

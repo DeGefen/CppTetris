@@ -16,9 +16,11 @@ int main() {
 	cout << b.count() << endl;
 	Sleep(250);
 	}
-
+	
 	t.erase();
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
 	cout << b.count() << endl;
-
+	//Point p;
+	//p.init(1, 1);
+	//p.draw('J');
 }
