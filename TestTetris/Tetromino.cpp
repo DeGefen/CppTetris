@@ -34,7 +34,7 @@ bool Tetromino::checkTetroMove(Board& board) {
     bool flag = true;
     for (int i = 0; i < NUM_OF_CORDS; ++i) {
         int n = NUM_OF_CORDS * position + i;
-        if (headX + cordX[n] < 0 || headX + cordX[n] >= GAME_WIDTH || headY + cordY[n] >= GAME_HEIGHT )
+        if (headX + cordX[n] < 0 || headX + cordX[n] > GAME_WIDTH-1 || headY + cordY[n] >= GAME_HEIGHT )
             return false;
     }
 
@@ -56,6 +56,8 @@ bool Tetromino::checkTetroMoveAUX(Board& board, int y) {
     ListNode* checkLine = board.getNodeFromIndex(y);
     Line* tetroLine = convertToLine(y);
     flag = checkLine->line->canIntersectLines(tetroLine, false);
+    Point p;
+    cout << tetroLine->arr;
     delete tetroLine;
     return flag;
 }
@@ -65,9 +67,10 @@ Line* Tetromino::convertToLine(int y) {
     tetroLine->setNewLine();
     for (int i = 0; i < NUM_OF_CORDS; ++i) {
         int n = NUM_OF_CORDS * position + i;
-        if (headY + cordY[3 * position + i] == y) {
-            tetroLine->arr[headX + cordX[3 * position + i]] = type;
+        if (headY + cordY[n] == y) {
+            tetroLine->arr[headX + cordX[n]] = type;
             ++(tetroLine->countFilled);
+            
         }
     }
     return tetroLine;
@@ -93,11 +96,13 @@ bool Tetromino::move(Board& board) { // returns true if moved tetro down, false 
         --headY;
         int y = NULL_VALUE;
         for (int i = 0; i < NUM_OF_CORDS; ++i) {
-            if (headY + cordY[3 * position + i] != y) {
-                y = headY + cordY[3 * position + i];
+            int n = NUM_OF_CORDS * position + i;
+            if (headY + cordY[n] != y) {
+                y = headY + cordY[n];
                 Line* tetroLine = convertToLine(y);
-                placeTetroAux(board, tetroLine, y);
+                placeTetro(board, tetroLine, y);
             }
+
         }
         return false;
     }
@@ -107,8 +112,8 @@ bool Tetromino::move(Board& board) { // returns true if moved tetro down, false 
     }
 }
 
-void Tetromino::placeTetroAux(Board& board, Line* tetroLine, int y) {
-    if (y <= GAME_HEIGHT - board.count()) {
+bool Tetromino::placeTetro(Board& board, Line* tetroLine, int y) {
+    if (y <= GAME_HEIGHT - board.count() - 1) {
         auto* tetroNode = new ListNode;
         tetroNode->line = tetroLine;
         board.addToHead(tetroNode);
@@ -157,49 +162,42 @@ void Tetromino::setTetro(int num) {
         cordY = {2,1,0,-1,0,0,0,0 };
         numOfPositions = 2;
         type = 'I';
-        color = getColor(type);
         break;
     case 1: // tetro O
         cordX = {1, 0,1,0 };
         cordY = {1, 1,0,0 };
         type = 'O';
         numOfPositions = 1;
-        color = getColor(type);
         break;
     case 2: // tetro T
         cordX = {0, 1, -1, 0,   0, 0, -1, 0,   0, -1, 1, 0,   0, 0, 1, 0 };
         cordY = {0, 0, 0, -1,   1, 0, 0, -1,   0, 0, 0, 1,    1, 0, 0, -1 };
         numOfPositions = 4;
         type = 'T';
-        color = getColor(type);
         break;
     case 3: // tetro J
         cordX = {0, -1, 0, 0,   1, -1, 1, 0,    0, 0, 0, 1,    0, 1, -1, -1 };
         cordY = {1, 1, 0, -1,   1, 0, 0, 0,    1, 0, -1, -1,    0, 0, 0, -1 };
         numOfPositions = 4;
         type = 'J';
-        color = getColor(type);
         break;
     case 4: // tetro L
         cordX = {0, 1, 0, 0,   0, -1, 1, 1,   0, 0, 0, -1,    -1, 1, -1, 0 };
         cordY = {1, 1, 0, -1,   0, 0, 0, -1,   1, 0, -1, -1,   1, 0, 0, 0 };
         numOfPositions = 4;
         type = 'L';
-        color = getColor(type);
         break;
     case 5: // tetro S
         cordX = {0, -1, 0, 1,    1, 0, 1, 0 };
         cordY = {1, 1, 0, 0,    1, 0, 0, -1 };
         numOfPositions = 2;
         type = 'S';
-        color = getColor(type);
         break;
     case 6: // tetro Z
         cordX = {1, 0, -1, 0,    -1, 0, -1, 0 };
         cordY = {1, 1, 0, 0,    1, 0, 0, -1 };
         numOfPositions = 2;
         type = 'Z';
-        color = getColor(type);
         break;
     }
 }
