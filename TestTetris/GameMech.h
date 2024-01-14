@@ -10,8 +10,8 @@
 class GameMech {
 public:
     Board* activeLines;
-    unsigned int score = 0;
-    void updateScore(int i);
+    //unsigned int score = 0;
+    //void updateScore(int i);
     void getNextTet();
     Tetromino currTet;
     //Tetromino nextTet;
