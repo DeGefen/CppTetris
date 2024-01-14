@@ -5,8 +5,8 @@ using namespace std;
 
 int main() {
 
-	//GamesManagement games;
-	//games.drawBorders();
+	GamesManagement games;
+	games.drawBorders();
 	Clock clock;
 	clock.addMiliSeconds(0);
 	Board b;
