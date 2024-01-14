@@ -44,7 +44,7 @@ private:
     Line* convertToLine(int y);
     bool checkTetroMove(Board& board);
     bool checkTetroMoveAUX(Board& board, int y);
-    bool placeTetro(Board& board, Line* tetroLine, int y);
+    void placeTetro(Board& board, Line* tetroLine, int y);
 };
 
 #endif //TETRIS_TETROMINO_H
