@@ -11,7 +11,7 @@ class Point {
 
 public:
 	void init(int x, int y);
-	void draw(char ch, int backcolor);
+	void draw(char ch);
 	//void move(GameMech::eKeys key);
 };
 

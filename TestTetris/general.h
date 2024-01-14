@@ -9,8 +9,9 @@
 using namespace std;
 
 #define SPACE ' '
-#define NUM_OF_CORDS 3
+//#define NUM_OF_CORDS 3
 void gotoxy(int, int);
 void clrscr();
+int getColor(char c);
 
 #endif // __GENERAL_H
