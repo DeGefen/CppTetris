@@ -4,7 +4,8 @@
 
 void Board::addToHead(ListNode* node) {
     if (head == nullptr) {
-        head = tail = node;
+        head = node;
+        tail = node;
     }
     else
     {
@@ -41,13 +42,12 @@ void Board::removeFromHead() {
     nodesCount--;
 }
 ListNode* Board::getNodeFromIndex(int i) {
+    if (i >= GAME_HEIGHT - 1 || nodesCount == 1)
+        return tail;
     ListNode* curr = head;
-    int nodeIdx = nodesCount - 1;
-    while (nodeIdx > i) {
-        curr = curr->next;
-        nodeIdx--;
-    }
+    for (int j = GAME_HEIGHT - nodesCount; j > i; --j, curr = curr->next);
     return curr;
+    Point p;
 }
 void Board::removeFromIndexes(int i, int j = -1) { // Need to test
     j = j == -1 ? i : j;
@@ -76,11 +76,17 @@ int Board::count() const {
     return nodesCount;
 }
 
-void Board::draw() {
+void Board::draw(int from) { //draws board from the bottom, begin with "GAME_HEIGHT - from - 1"
     ListNode* node = tail;
-    while (node->prev != nullptr) {
-
-    }
+    Point p;
+    for (int i = GAME_HEIGHT - from - 1; i >= 0 && node != nullptr; --i, node = node->prev) {
+        p.init(0, i);
+        for (int j = 0; j < GAME_WIDTH;++j) {
+                p.init(j, i);
+                if (node->line->arr[j]!=SPACE)
+                    p.draw(node->line->arr[j]);
+            }
+        }
 }
 
 void Board::updateScore(int i) {

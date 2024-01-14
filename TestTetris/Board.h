@@ -4,6 +4,9 @@
 //
 
 #include "ListNode.h"
+#include "Point.h"
+#include <Windows.h>
+#include "general.h"
 
 #ifndef TETRIS_Board_H
 #define TETRIS_Board_H
@@ -11,8 +14,8 @@
 #endif //TETRIS_Board_H
 
 class Board {
-    ListNode* head;
-    ListNode* tail;
+    ListNode* head= nullptr;
+    ListNode* tail = nullptr;
     int nodesCount;
     unsigned int score = 0;
     void updateScore(int i);
@@ -25,5 +28,5 @@ public:
     ListNode* getNodeFromIndex(int i);
     void removeFromIndexes(int i, int j);
     int count() const;
-    void draw();
+    void draw(int from = 0);
 };

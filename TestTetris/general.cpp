@@ -46,8 +46,11 @@ int getColor(char c) {
 	case 'G':
 		color = 0x808080;
 		break;
+	case ' ':
+		color = 0x00;
+		break;
 	default:
-		color = 0;
+		color = 0x0F;
 		break;
 	}
 	return color;

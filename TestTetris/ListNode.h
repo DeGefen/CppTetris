@@ -11,8 +11,8 @@
 class ListNode {
 public:
     Line* line;
-    ListNode* next = NULL;
-    ListNode* prev = NULL;
+    ListNode* next = nullptr;
+    ListNode* prev = nullptr;
     ListNode* setNewNode();
     void deleteNode();
 };
