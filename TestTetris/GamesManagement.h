@@ -4,6 +4,7 @@
 
 //#include "Board.h"
 #include "GameMech.h"
+#include "Clock.h"
 
 class GamesManagement {
     GameMech* game1;

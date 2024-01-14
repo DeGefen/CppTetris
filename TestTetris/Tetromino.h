@@ -13,6 +13,7 @@ I = #   O = ##   T =  #    J =  #   L = #    S =  ##   Z = ##
 #include <Windows.h>
 #include "point.h"
 #include "Board.h"
+#include "general.h"
 using namespace std;
 
 #define GAME_HEIGHT 18

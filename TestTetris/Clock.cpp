@@ -1,0 +1,35 @@
+#include "Clock.h"
+
+void Clock::addMiliSeconds(unsigned int ms)
+{
+	Sleep(ms);
+	miliSeconds += ms;
+	if (miliSeconds >= 1000) {
+		seconds += miliSeconds / 1000;
+		miliSeconds = miliSeconds % 1000;
+	}
+	if (seconds > 59) {
+		minutes++;
+		seconds = 0;
+	}
+	drawClock(min_x, min_y);
+}
+
+void Clock::drawClock(int minx, int miny)
+{
+	int backcolor = getColor('G');
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
+	gotoxy(minx, miny);
+
+	if (minutes < 10) {
+		std::cout << '0';
+	}
+	std::cout << minutes << ":";
+
+	if (seconds < 10) {
+		std::cout << '0';
+	}
+	std::cout << seconds << std::endl;
+
+	//cout << minutes << ':' << seconds;
+}

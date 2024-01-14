@@ -14,6 +14,8 @@ class Board {
     ListNode* head;
     ListNode* tail;
     int nodesCount;
+    unsigned int score = 0;
+    void updateScore(int i);
 public:
     Board() { head = nullptr; tail = nullptr; nodesCount = 0; };
     void addToHead(ListNode* node);

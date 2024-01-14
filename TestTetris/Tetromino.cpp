@@ -1,5 +1,4 @@
 #include "Tetromino.h"
-#include "general.h"
 
 
 void Tetromino::rotate(Board& board, short direction) { // Rotate clockwise (direction = -1), counter-clockwise (direction = 1)

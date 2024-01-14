@@ -25,8 +25,10 @@ void Board::removeFromTail() { // Necessary?
     tail->next->deleteNode();
     tail->next = nullptr;
     nodesCount--;
+    updateScore(1);
 }
 void Board::removeFromHead() {
+    updateScore(1);
     if (head == tail) {
         head->deleteNode();
         head = tail = nullptr;
@@ -49,6 +51,7 @@ ListNode* Board::getNodeFromIndex(int i) {
 }
 void Board::removeFromIndexes(int i, int j = -1) { // Need to test
     j = j == -1 ? i : j;
+    updateScore(i - j+1);
     ListNode* curr = getNodeFromIndex(i);
     ListNode* saver = curr->prev;
     while (i >= j) {
@@ -77,5 +80,19 @@ void Board::draw() {
     ListNode* node = tail;
     while (node->prev != nullptr) {
 
+    }
+}
+
+void Board::updateScore(int i) {
+    switch (i) {
+    case 1:
+        score += 40;
+    case 2:
+        score += 100;
+    case 3:
+        score += 300;
+    case 4:
+        score += 1200;
+    default: {}
     }
 }

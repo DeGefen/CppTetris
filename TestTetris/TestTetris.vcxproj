@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Clock.cpp" />
     <ClCompile Include="GameMech.cpp" />
     <ClCompile Include="GamesManagement.cpp" />
     <ClCompile Include="general.cpp" />
@@ -139,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Clock.h" />
     <ClInclude Include="GameMech.h" />
     <ClInclude Include="GamesManagement.h" />
     <ClInclude Include="general.h" />

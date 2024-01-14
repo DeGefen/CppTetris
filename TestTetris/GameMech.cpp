@@ -20,19 +20,19 @@
 //    system("cls");
 //}
 
-void GameMech::updateScore(int i) {
-    switch (i) {
-    case 1:
-        score += 40;
-    case 2:
-        score += 100;
-    case 3:
-        score += 300;
-    case 4:
-        score += 1200;
-    default: {}
-    }
-}
+//void GameMech::updateScore(int i) {
+//    switch (i) {
+//    case 1:
+//        score += 40;
+//    case 2:
+//        score += 100;
+//    case 3:
+//        score += 300;
+//    case 4:
+//        score += 1200;
+//    default: {}
+//    }
+//}
 
 void GameMech::getNextTet() {
     std::rand();
