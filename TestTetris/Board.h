@@ -25,8 +25,11 @@ public:
     void addToTail(ListNode* node);
     void removeFromTail();
     void removeFromHead();
+    void removeFromMiddle(ListNode* node);
+    void remove(vector<ListNode*> arr);
     ListNode* getNodeFromIndex(int i);
-    void removeFromIndexes(int i, int j);
+    //void removeFromIndexes(int i, int j);
     int count() const;
     void draw(int from = 0);
+    void eraseLine(int y);
 };
