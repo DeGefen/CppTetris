@@ -112,7 +112,7 @@ bool Tetromino::move(Board& board) { // returns true if moved tetro down, false 
     }
 }
 
-bool Tetromino::placeTetro(Board& board, Line* tetroLine, int y) {
+void Tetromino::placeTetro(Board& board, Line* tetroLine, int y) {
     if (y <= GAME_HEIGHT - board.count() - 1) {
         auto* tetroNode = new ListNode;
         tetroNode->line = tetroLine;
