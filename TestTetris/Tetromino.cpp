@@ -56,8 +56,6 @@ bool Tetromino::checkTetroMoveAUX(Board& board, int y) {
     ListNode* checkLine = board.getNodeFromIndex(y);
     Line* tetroLine = convertToLine(y);
     flag = checkLine->line->canIntersectLines(tetroLine, false);
-    Point p;
-    cout << tetroLine->arr;
     delete tetroLine;
     return flag;
 }
@@ -94,15 +92,20 @@ bool Tetromino::move(Board& board) { // returns true if moved tetro down, false 
     ++headY;
     if (!checkTetroMove(board)) {
         --headY;
+        vector<ListNode*> filledLines;
         int y = NULL_VALUE;
         for (int i = 0; i < NUM_OF_CORDS; ++i) {
             int n = NUM_OF_CORDS * position + i;
             if (headY + cordY[n] != y) {
                 y = headY + cordY[n];
                 Line* tetroLine = convertToLine(y);
-                placeTetro(board, tetroLine, y);
+                ListNode* temp = placeTetro(board, tetroLine, y);
+                if(temp!=nullptr) {
+                    filledLines.push_back(temp);
+                    board.eraseLine(y);
+                }
             }
-
+            board.remove(filledLines);
         }
         return false;
     }
@@ -112,15 +115,19 @@ bool Tetromino::move(Board& board) { // returns true if moved tetro down, false 
     }
 }
 
-void Tetromino::placeTetro(Board& board, Line* tetroLine, int y) {
+ListNode* Tetromino::placeTetro(Board& board, Line* tetroLine, int y) {
     if (y <= GAME_HEIGHT - board.count() - 1) {
         auto* tetroNode = new ListNode;
         tetroNode->line = tetroLine;
         board.addToHead(tetroNode);
+        return nullptr;
     }
     else {
         auto* listNode = board.getNodeFromIndex(y);
         listNode->line->canIntersectLines(tetroLine);
+        if (listNode->line->countFilled >= 12)
+            return listNode;
+        return nullptr;
     }
 }
 

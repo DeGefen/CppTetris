@@ -26,10 +26,8 @@ void Board::removeFromTail() { // Necessary?
     tail->next->deleteNode();
     tail->next = nullptr;
     nodesCount--;
-    updateScore(1);
 }
 void Board::removeFromHead() {
-    updateScore(1);
     if (head == tail) {
         head->deleteNode();
         head = tail = nullptr;
@@ -41,36 +39,42 @@ void Board::removeFromHead() {
     head->prev = nullptr;
     nodesCount--;
 }
+
+void Board::removeFromMiddle(ListNode* node) {
+    node->next->prev = node->prev;
+    node->prev->next = node->next;
+    node->deleteNode();
+}
+
 ListNode* Board::getNodeFromIndex(int i) {
     if (i >= GAME_HEIGHT - 1 || nodesCount == 1)
         return tail;
     ListNode* curr = head;
     for (int j = GAME_HEIGHT - nodesCount; j > i; --j, curr = curr->next);
     return curr;
-    Point p;
 }
-void Board::removeFromIndexes(int i, int j = -1) { // Need to test
-    j = j == -1 ? i : j;
-    updateScore(i - j+1);
-    ListNode* curr = getNodeFromIndex(i);
-    ListNode* saver = curr->prev;
-    while (i >= j) {
-        if (i == 0) {
-            removeFromHead();
-        }
-        else {
-            curr = curr->next;
-            curr->prev->deleteNode();
-            nodesCount--;
-            i--;
-        }
-    }
-    curr->prev = saver;
-    if (curr->prev == nullptr)
-        head = curr;
-    else
-        curr->prev->next = curr;
-}
+//void Board::removeFromIndexes(int i, int j = -1) { // Need to test
+//    j = j == -1 ? i : j;
+//    updateScore(i - j+1);
+//    ListNode* curr = getNodeFromIndex(i);
+//    ListNode* saver = curr->prev;
+//    while (i >= j) {
+//        if (i == 0) {
+//            removeFromHead();
+//        }
+//        else {
+//            curr = curr->next;
+//            curr->prev->deleteNode();
+//            nodesCount--;
+//            i--;
+//        }
+//    }
+//    curr->prev = saver;
+//    if (curr->prev == nullptr)
+//        head = curr;
+//    else
+//        curr->prev->next = curr;
+//}
 
 int Board::count() const {
     return nodesCount;
@@ -101,4 +105,20 @@ void Board::updateScore(int i) {
         score += 1200;
     default: {}
     }
+}
+
+void Board::remove(vector<ListNode*> arr) {
+    updateScore(arr.size());
+    for (ListNode* temp : arr) {
+        if (temp == head) removeFromHead();
+        else if (temp == tail) removeFromTail();
+        else removeFromMiddle(temp);
+    }
+}
+
+void Board::eraseLine(int y) {
+    Point p;
+    p.init(0, y);
+    p.draw(' ');
+    cout << "           ";
 }
