@@ -43,6 +43,9 @@ int getColor(char c) {
 	case 'Z':
 		color = 0x4F;
 		break;
+	case 'G':
+		color = 0x808080;
+		break;
 	default:
 		color = 0;
 		break;

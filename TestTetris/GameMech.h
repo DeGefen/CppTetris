@@ -15,7 +15,7 @@ public:
     void getNextTet();
     Tetromino currTet;
     //Tetromino nextTet;
-    void drawBorder();
+    void drawBorder(int minx, int miny, bool isGameBorder);
     void init(int num);
     void run();
     void freeMemory();

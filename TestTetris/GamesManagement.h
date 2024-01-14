@@ -23,6 +23,8 @@ public:
     static const int COLORS[];
     static const int NUM_OF_COLORS;
 
+    void drawBorders();
+
     //void gotoxy(int, int);
     //void clrscr();
 };
