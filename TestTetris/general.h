@@ -1,5 +1,6 @@
 #ifndef __GENERAL_H
 #define __GENERAL_H
+
 #include <iostream>
 #include <string>
 #include <vector>
