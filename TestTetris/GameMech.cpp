@@ -34,8 +34,12 @@
 //    }
 //}
 
-void GameMech::getNextTet() {
-    std::rand();
+Tetromino GameMech::getNextTet() {
+    srand(static_cast<unsigned int>(time(0)));
+    int random = rand() % 7 + 1;
+    Tetromino tet;
+    tet.setTetro(random);
+    return tet;
 }
 
 void GameMech::drawBorder(int minx, int miny, bool isGameBorder) {
@@ -68,8 +72,18 @@ void GameMech::init(int num)
 {
 }
 
-void GameMech::run()
+void GameMech::runGame(Clock* clock, bool p1)
 {
+    Tetromino curr = getNextTet();
+    clock->addMiliSeconds(500);
+    Tetromino next = getNextTet();
+    //Tetromino* currP = &curr;
+    //Tetromino* nextP = &next;
+    curr.jumpTo(MIN_X1-3, 0);
+    next.jumpTo(MIN_X1+13, 4);
+    curr.draw();
+    next.draw();
+
 }
 
 void GameMech::freeMemory()

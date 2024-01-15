@@ -17,7 +17,7 @@ void Point::draw(char ch)
 {
 	int backcolor = getColor(ch);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
-	gotoxy(x + GamesManagement::MIN_X - 1, y + GamesManagement::MIN_Y - 1);
+	gotoxy(x + GameMech::MIN_X - 1, y + GameMech::MIN_Y - 1);
 	cout << ch;
 }
 
