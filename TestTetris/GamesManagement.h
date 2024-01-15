@@ -12,8 +12,8 @@ class GamesManagement {
     Clock clock;
 
 
-    enum class eKeys1 { LEFT = 'a', RIGHT = 's', ROTATE_CLOCKWISE = 's', ROTATE_COUNTERCLOCKWISE = 'w', DROP = 'x', ESC = 27 };
-    enum class eKeys2 { LEFT = 'j', RIGHT = 'l', ROTATE_CLOCKWISE = 'k', ROTATE_COUNTERCLOCKWISE = 'i', DROP = 'm', ESC = 27 };
+    //enum class eKeys1 { LEFT = 'a', RIGHT = 's', ROTATE_CLOCKWISE = 's', ROTATE_COUNTERCLOCKWISE = 'w', DROP = 'x', ESC = 27 };
+    //enum class eKeys2 { LEFT = 'j', RIGHT = 'l', ROTATE_CLOCKWISE = 'k', ROTATE_COUNTERCLOCKWISE = 'i', DROP = 'm', ESC = 27 };
 
 public:
     //    static constexpr int GAME_WIDTH = 20;
