@@ -16,10 +16,13 @@
 class Board {
     ListNode* head= nullptr;
     ListNode* tail = nullptr;
-    int nodesCount;
+    //int nodesCount = 0;
+    //unsigned int score = 0;
+   //void updateScore(int i);
+public:
+    int nodesCount = 0;
     unsigned int score = 0;
     void updateScore(int i);
-public:
     Board() { head = nullptr; tail = nullptr; nodesCount = 0; };
     void addToHead(ListNode* node);
     void addToTail(ListNode* node);
@@ -32,4 +35,5 @@ public:
     int count() const;
     void draw(int from = 0);
     void eraseLine(int y);
+    void init();
 };

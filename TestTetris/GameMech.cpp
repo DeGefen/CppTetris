@@ -1,8 +1,10 @@
 #include <windows.h> // for gotoxy
 #include <process.h> // for system
 #include <iostream>
+#include <conio.h>
 #include "general.h"
 #include "GamesManagement.h"
+
 
 //void gotoxy(int x, int y)
 //{
@@ -68,12 +70,17 @@ void GameMech::drawBorder(int minx, int miny, bool isGameBorder) {
     }
 }
 
-void GameMech::init(int num)
+void GameMech::init(Board* board)
 {
+    //activeLines = board;
 }
 
 void GameMech::runGame(Clock* clock, bool p1)
 {
+    //Board board;
+    //board.init();
+    //this->init(&board);
+    //activeLines->init();
     Tetromino curr = getNextTet();
     clock->addMiliSeconds(500);
     Tetromino next = getNextTet();
@@ -83,6 +90,18 @@ void GameMech::runGame(Clock* clock, bool p1)
     next.jumpTo(MIN_X1+13, 4);
     curr.draw();
     next.draw();
+    while (true) {
+        int keyPressed = 0;
+        if (_kbhit()) {
+            keyPressed = _getch();
+            if (keyPressed == (int)eKeys1::ESC)
+                break;
+        }
+        Sleep(500);
+        //for (int i = 0; i < numOfSnakes; i++)
+        curr.sideMove(activeLines, 1);
+            //allSnakes[i].move((GameConfig::eKeys)keyPressed);
+    }
 
 }
 

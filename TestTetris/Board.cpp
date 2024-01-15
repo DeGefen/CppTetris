@@ -135,3 +135,11 @@ void Board::eraseLine(int y) {
     p.draw(' ');
     cout << "           ";
 }
+
+void Board::init()
+{
+    this->head = nullptr;
+    this->tail = nullptr;
+    this->nodesCount = 0;
+    score = 0;
+}
