@@ -23,28 +23,28 @@ int getColor(char c) {
 	int color;
 	switch (c) {
 	case 'I':
-		color = 0xBF;
+		color = 0xBB;
 		break;
 	case 'O':
-		color = 0xEF;
+		color = 0xEE;
 		break;
 	case 'T':
-		color = 0x5F;
+		color = 0x55;
 		break;
 	case 'J':
-		color = 0x1F;
+		color = 0x11;
 		break;
 	case 'L':
-		color = 0x6F;
+		color = 0x66;
 		break;
 	case 'S':
-		color = 0xAF;
+		color = 0xAA;
 		break;
 	case 'Z':
-		color = 0x4F;
+		color = 0x44;
 		break;
 	case 'G':
-		color = 0x808080;
+		color = 0x88;
 		break;
 	case ' ':
 		color = 0x00;
