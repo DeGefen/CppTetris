@@ -23,6 +23,17 @@ using namespace std;
 
 class Tetromino {
 public:
+    Tetromino(int i) { setTetro(i); }
+    Tetromino& operator=(const Tetromino& tetro) {
+        if (&tetro != this) {
+            cordX = tetro.cordX;
+            cordY = tetro.cordY;
+            type = tetro.type;
+            position = 0;
+            numOfPositions = tetro.numOfPositions;
+        }
+        return *this;
+    }
     void jumpTo(int x, int y);
     void rotate(Board& board, short direction);
     void sideMove(Board& board, short direction);
@@ -30,7 +41,6 @@ public:
     bool move(Board& board);
     void draw();
     void erase();
-    void setTetro(int num);
 
 private:
     int headX;
@@ -41,6 +51,7 @@ private:
     short position = 0;
     short numOfPositions;
 
+    void setTetro(int num);
     Line* convertToLine(int y);
     bool checkTetroMove(Board& board);
     bool checkTetroMoveAUX(Board& board, int y);
