@@ -42,7 +42,7 @@ bool Tetromino::checkTetroMove(Board& board) {
         int y = NULL_VALUE;
         for (int i = 0; i < NUM_OF_CORDS; ++i) {
             int n = NUM_OF_CORDS * position + i;
-            if (flag && headY + cordY[n] != y && headY + cordY[n] >= GAME_HEIGHT - board.count() - 1) {
+            if (flag && headY + cordY[n] != y && headY + cordY[n] >= GAME_HEIGHT - board.count()) {
                 y = headY + cordY[n];
                 flag = checkTetroMoveAUX(board, headY + cordY[n]);
             }
