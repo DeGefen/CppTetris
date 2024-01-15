@@ -20,41 +20,49 @@
 //    system("cls");
 //}
 
-void GameMech::updateScore(int i) {
-    switch (i) {
-    case 1:
-        score += 40;
-    case 2:
-        score += 100;
-    case 3:
-        score += 300;
-    case 4:
-        score += 1200;
-    default: {}
-    }
+//void GameMech::updateScore(int i) {
+//    switch (i) {
+//    case 1:
+//        score += 40;
+//    case 2:
+//        score += 100;
+//    case 3:
+//        score += 300;
+//    case 4:
+//        score += 1200;
+//    default: {}
+//    }
+//}
+
+Tetromino GameMech::getNextTet() {
+    srand(static_cast<unsigned int>(time(0)));
+    int random = rand() % 7 + 1;
+    Tetromino tet;
+    tet.setTetro(random);
+    return tet;
 }
 
-void GameMech::getNextTet() {
-    std::rand();
-}
-
-void GameMech::drawBorder() {
+void GameMech::drawBorder(int minx, int miny, bool isGameBorder) {
+    int width = isGameBorder ? GAME_WIDTH : NEXT_TET_WIDTH;
+    int height = isGameBorder ? GAME_HEIGHT : NEXT_TET_HEIGHT;
+    int backcolor = getColor('G');
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
     {
-        for (int col = GamesManagement::MIN_X; col < GAME_WIDTH + GamesManagement::MIN_X; col++)
+        for (int col = minx; col < width + minx; col++)
         {
-            gotoxy(col, GamesManagement::MIN_Y - 1);
+            gotoxy(col, miny - 1);
             cout << "-";
 
-            gotoxy(col, GAME_HEIGHT + GamesManagement::MIN_Y);
+            gotoxy(col, height + miny);
             cout << "-";
         }
 
-        for (int row = GamesManagement::MIN_Y - 1; row <= GAME_HEIGHT + GamesManagement::MIN_Y; row++)
+        for (int row = miny - 1; row <= height + miny; row++)
         {
-            gotoxy(GamesManagement::MIN_X - 1, row);
+            gotoxy(minx - 1, row);
             cout << "|";
 
-            gotoxy(GAME_WIDTH + GamesManagement::MIN_X, row);
+            gotoxy(width + minx, row);
             cout << "|";
         }
     }
@@ -64,8 +72,18 @@ void GameMech::init(int num)
 {
 }
 
-void GameMech::run()
+void GameMech::runGame(Clock* clock, bool p1)
 {
+    Tetromino curr = getNextTet();
+    clock->addMiliSeconds(500);
+    Tetromino next = getNextTet();
+    //Tetromino* currP = &curr;
+    //Tetromino* nextP = &next;
+    curr.jumpTo(MIN_X1-3, 0);
+    next.jumpTo(MIN_X1+13, 4);
+    curr.draw();
+    next.draw();
+
 }
 
 void GameMech::freeMemory()

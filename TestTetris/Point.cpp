@@ -13,12 +13,15 @@ void Point::init(int x, int y)
 	diff_x = 1;
 	diff_y = 0;
 }
-void Point::draw(char ch, int backcolor)
+void Point::draw(char ch)
 {
+	int backcolor = getColor(ch);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
-	gotoxy(x + GamesManagement::MIN_X - 1, y + GamesManagement::MIN_Y - 1);
+	gotoxy(x + GameMech::MIN_X - 1, y + GameMech::MIN_Y - 1);
 	cout << ch;
 }
+
+
 //void Point::move(GamesManagement::eKeys key)
 //{
 //	switch (key)

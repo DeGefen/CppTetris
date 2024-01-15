@@ -4,10 +4,12 @@
 
 //#include "Board.h"
 #include "GameMech.h"
+#include "Clock.h"
 
 class GamesManagement {
     GameMech* game1;
     GameMech* game2;
+    Clock clock;
 
 
     enum class eKeys1 { LEFT = 'a', RIGHT = 's', ROTATE_CLOCKWISE = 's', ROTATE_COUNTERCLOCKWISE = 'w', DROP = 'x', ESC = 27 };
@@ -17,11 +19,17 @@ public:
     //    static constexpr int GAME_WIDTH = 20;
     //    static constexpr int GAME_HEIGHT = 20;
     //
-    static constexpr int MIN_Y = 3;
-    static constexpr int MIN_X = 10;
+    //static constexpr int MIN_Y = 3;
+    //static constexpr int MIN_X = 10;
+    //static constexpr int MIN_X1 = 9;
+    //static constexpr int MIN_X2 = 55;
 
     static const int COLORS[];
     static const int NUM_OF_COLORS;
+
+    void drawBorders();
+
+    void runGames();
 
     //void gotoxy(int, int);
     //void clrscr();
