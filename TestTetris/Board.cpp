@@ -43,15 +43,28 @@ void Board::removeFromHead() {
 void Board::removeFromMiddle(ListNode* node) {
     node->next->prev = node->prev;
     node->prev->next = node->next;
+    nodesCount--;
     node->deleteNode();
 }
 
 ListNode* Board::getNodeFromIndex(int i) {
-    if (i >= GAME_HEIGHT - 1 || nodesCount == 1)
-        return tail;
-    ListNode* curr = head;
-    for (int j = GAME_HEIGHT - nodesCount; j > i; --j, curr = curr->next);
-    return curr;
+    
+    int y = GAME_HEIGHT - nodesCount;
+    ListNode* node = head;
+    while (y != i && node->next!=nullptr) {
+        ++y;
+        node = node->next;;
+    }
+    return node;
+    
+    //if (i >= GAME_HEIGHT - 1 || nodesCount == 1)
+    //    return tail;
+    //ListNode* curr = nullptr;
+    //for (int j = GAME_HEIGHT - 1; j != i; ++j) {
+    //    if (curr == nullptr) curr = tail;
+    //    else curr = curr->next;
+    //}
+    //return curr;
 }
 //void Board::removeFromIndexes(int i, int j = -1) { // Need to test
 //    j = j == -1 ? i : j;
