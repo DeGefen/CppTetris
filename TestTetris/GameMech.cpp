@@ -36,13 +36,6 @@
 //    }
 //}
 
-Tetromino GameMech::getNextTet() {
-    srand(static_cast<unsigned int>(time(0)));
-    int random = rand() % 7 + 1;
-    Tetromino tet;
-    tet.setTetro(random);
-    return tet;
-}
 
 void GameMech::drawBorder(int minx, int miny, bool isGameBorder) {
     int width = isGameBorder ? GAME_WIDTH : NEXT_TET_WIDTH;
@@ -77,15 +70,11 @@ void GameMech::init(Board* board)
 
 void GameMech::runGame(Clock* clock, bool p1)
 {
-    //Board board;
-    //board.init();
-    //this->init(&board);
-    //activeLines->init();
-    Tetromino curr = getNextTet();
+    Board board;
+    srand((time(0)));
+    Tetromino next(rand() % 7);
+    Tetromino curr(rand() % 7);
     clock->addMiliSeconds(500);
-    Tetromino next = getNextTet();
-    //Tetromino* currP = &curr;
-    //Tetromino* nextP = &next;
     curr.jumpTo(MIN_X1-3, 0);
     next.jumpTo(MIN_X1+13, 4);
     curr.draw();
@@ -99,9 +88,10 @@ void GameMech::runGame(Clock* clock, bool p1)
         }
         Sleep(500);
         //for (int i = 0; i < numOfSnakes; i++)
-        curr.sideMove(activeLines, 1);
+        curr.sideMove(board, 1);
             //allSnakes[i].move((GameConfig::eKeys)keyPressed);
     }
+
 
 }
 
