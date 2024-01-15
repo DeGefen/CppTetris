@@ -12,8 +12,14 @@ const int GamesManagement::NUM_OF_COLORS = sizeof(COLORS) / sizeof(int);
 void GamesManagement::drawBorders()
 {
 	cout << "	Player 1:	  Next Shape:		      Player2:	        Next Shape:";
-	game1->drawBorder(MIN_X1, 2, true);
-	game1->drawBorder(MIN_X1 + 6 + GAME_WIDTH, 2, false);
-	game2->drawBorder(MIN_X2, 2, true);
-	game1->drawBorder(MIN_X2 + 6 + GAME_WIDTH, 2, false);
+	game1->drawBorder(GameMech::MIN_X1, 2, true);
+	game1->drawBorder(GameMech::MIN_X1 + 6 + GAME_WIDTH, 2, false);
+	game2->drawBorder(GameMech::MIN_X2, 2, true);
+	game1->drawBorder(GameMech::MIN_X2 + 6 + GAME_WIDTH, 2, false);
 };
+
+void GamesManagement::runGames() {
+	drawBorders();
+	game1->runGame(&clock, true);
+	//game2->runGame(&clock);
+}
