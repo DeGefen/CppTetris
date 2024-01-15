@@ -29,9 +29,9 @@ void louding_screen(int n) {
         Sleep(50+(rand()%200));
         std::cout << '|';
     }
-    Sleep(1000);
+    Sleep(1300);
     std::cout << '|';
-    Sleep(300);
+    Sleep(500);
     std::cout << '|';
 
 
