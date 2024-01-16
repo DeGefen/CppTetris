@@ -1,5 +1,4 @@
 #include <Windows.h>
-#include "MasterHeader.h"
 #include "GamesManagement.h"
 #include "Menu.h"
 #include <cstdlib>
