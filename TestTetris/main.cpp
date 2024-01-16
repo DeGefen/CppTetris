@@ -2,10 +2,14 @@
 #include "GamesManagement.h"
 #include "Menu.h"
 #include <cstdlib>
+
 using namespace std;
 
 int main() {
+	//louding_screen(0);
+	//menuControl();
 	GamesManagement games;
+	//Sleep(50000);
 	games.runGames();
 	Sleep(10000);
 	//games.drawBorders();

@@ -1,8 +1,7 @@
 #include "GamesManagement.h"
 #include <cstdlib>
 
-void GamesManagement::drawBorders()
-{
+void GamesManagement::drawBorders() {
 	cout << "	Player 1:	  Next Shape:		      Player2:	        Next Shape:";
 	game1->drawBorder(GameMech::MIN_X1, 2, true);
 	game1->drawBorder(GameMech::MIN_X1 + 6 + GAME_WIDTH, 2, false);
@@ -11,6 +10,7 @@ void GamesManagement::drawBorders()
 };
 
 void GamesManagement::runGames() {
+    menuControl();
     drawBorders();
 	//game1->runGame(&clock, true);
 	//game2->runGame(&clock, true);
