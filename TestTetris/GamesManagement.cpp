@@ -1,13 +1,5 @@
-//
-// Created by Eylon Serok on 07/01/2024.
-//
-
 #include "GamesManagement.h"
-
-#include <Windows.h>
-
-const int GamesManagement::COLORS[] = { FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED, 96, 176, 224, 95, 23, 111, 143, 48 };
-const int GamesManagement::NUM_OF_COLORS = sizeof(COLORS) / sizeof(int);
+#include <cstdlib>
 
 void GamesManagement::drawBorders()
 {
@@ -19,7 +11,30 @@ void GamesManagement::drawBorders()
 };
 
 void GamesManagement::runGames() {
-	drawBorders();
-	game1->runGame(&clock, true);
-	//game2->runGame(&clock);
+    drawBorders();
+	//game1->runGame(&clock, true);
+	//game2->runGame(&clock, true);
+    srand((time(0)));
+    clock.addMiliSeconds(500);
+    while (true) {
+        int keyPressed = 0;
+        if (_kbhit()) {
+            keyPressed = _getch();
+            if (keyPressed == (int)eKeys1::ESC)
+                break;
+        }
+        Sleep(500);
+
+    }
+
+
+}
+
+void movment(int key) {
+    switch (key) {
+    case (int)eKeys1::LEFT:
+        break;
+    default:
+        break;
+    }
 }
