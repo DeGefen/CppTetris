@@ -5,10 +5,10 @@
 #include "Line.h"
 
 
-ListNode* ListNode::setNewNode() {
+void ListNode::setNewNode() {
+    next = nullptr; prev = nullptr;
     line = new Line;
     line->setNewLine();
-    return this; //Necessary ?
 }
 void ListNode::deleteNode() {
     delete (line);

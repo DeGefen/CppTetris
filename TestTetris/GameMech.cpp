@@ -5,64 +5,25 @@
 #include "general.h"
 #include "GamesManagement.h"
 
-void GameMech::drawBorder(int minx, int miny, bool isGameBorder) {
-    int width = isGameBorder ? GAME_WIDTH : NEXT_TET_WIDTH;
-    int height = isGameBorder ? GAME_HEIGHT : NEXT_TET_HEIGHT;
-    int backcolor = getColor('G');
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
-    {
-        for (int col = minx; col < width + minx; col++)
-        {
-            gotoxy(col, miny - 1);
-            cout << "-";
-
-            gotoxy(col, height + miny);
-            cout << "-";
-        }
-
-        for (int row = miny - 1; row <= height + miny; row++)
-        {
-            gotoxy(minx - 1, row);
-            cout << "|";
-
-            gotoxy(width + minx, row);
-            cout << "|";
-        }
-    }
+bool GameMech::run(bool isDropped) { //return false if player lost
+	if (isDropped || !curr.move(board)) {
+		next.erase();
+		curr = next;
+		next = Tetromino(rand() % 7, game);
+		curr.jumpTo(STARTING_X, STARTING_Y);
+		curr.draw();
+		next.jumpTo(NEXT_X, NEXT_Y);
+		next.draw();
+	}
+	board.draw();
+	if (board.count() >= GAME_HEIGHT)	return false;
+	return true;
 }
 
-//void GameMech::init(Board* board)
-//{
-//    //activeLines = board;
-//}
-
-void GameMech::runGame(Clock* clock, bool p1)
-{
-    Board board;
-    srand((time(0)));
-    Tetromino next(rand() % 7);
-    Tetromino curr(rand() % 7);
-    clock->addMiliSeconds(500);
-    curr.jumpTo(MIN_X1-3, 0);
-    next.jumpTo(MIN_X1+13, 4);
-    curr.draw();
-    next.draw();
-    while (true) {
-        int keyPressed = 0;
-        if (_kbhit()) {
-            keyPressed = _getch();
-            if (keyPressed == (int)eKeys1::ESC)
-                break;
-        }
-        Sleep(500);
-        //for (int i = 0; i < numOfSnakes; i++)
-        curr.sideMove(board, 1);
-            //allSnakes[i].move((GameConfig::eKeys)keyPressed);
-    }
-
-
-}
-
-void GameMech::freeMemory()
-{
+void GameMech::lunch() {
+	next = Tetromino(rand() % 7, game);
+	curr = Tetromino(rand() % 7, game);
+	curr.jumpTo(STARTING_X, STARTING_Y);
+	next.jumpTo(NEXT_X, NEXT_Y);
+	board = Board(game);
 }

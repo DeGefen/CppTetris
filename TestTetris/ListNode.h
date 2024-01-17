@@ -1,8 +1,3 @@
-#pragma once
-//
-// Created by Eylon Serok on 07/01/2024.
-//
-
 #ifndef TETRIS_LISTNODE_H
 #define TETRIS_LISTNODE_H
 
@@ -10,10 +5,11 @@
 
 class ListNode {
 public:
+    ListNode() { setNewNode(); }
     Line* line;
     ListNode* next = nullptr;
     ListNode* prev = nullptr;
-    ListNode* setNewNode();
+    void setNewNode();
     void deleteNode();
 };
 

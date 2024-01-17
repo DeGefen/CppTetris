@@ -1,12 +1,6 @@
 #ifndef TETRIS_TETROMINO_H
 #define TETRIS_TETROMINO_H
 
-/*
-I = #   O = ##   T =  #    J =  #   L = #    S =  ##   Z = ##
-    #       ##       ###        #       #       ##          ##
-    #                          ##       ##
-    #
- */
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,9 +17,11 @@ using namespace std;
 
 class Tetromino {
 public:
-    Tetromino(int i) { setTetro(i); }
+    Tetromino(int i = 0, bool b = true) { game = b; setTetro(i); position = 0; }
     Tetromino& operator=(const Tetromino& tetro) {
         if (&tetro != this) {
+            p = tetro.p;
+            game = tetro.game;
             cordX = tetro.cordX;
             cordY = tetro.cordY;
             type = tetro.type;
@@ -50,6 +46,8 @@ private:
     char type;
     short position = 0;
     short numOfPositions;
+    Point p;
+    bool game;
 
     void setTetro(int num);
     Line* convertToLine(int y);

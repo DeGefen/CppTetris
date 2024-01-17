@@ -34,6 +34,8 @@ void Clock::drawClock(int minx, int miny)
 	//cout << minutes << ':' << seconds;
 }
 
-unsigned int Clock::getBuffer() {
-	return buffer;
+void Clock::reset() {
+  miliSeconds = 0;
+  seconds = 0;
+  minutes = 0;
 }
