@@ -16,24 +16,24 @@
 class Board {
     ListNode* head= nullptr;
     ListNode* tail = nullptr;
-    //int nodesCount = 0;
-    //unsigned int score = 0;
-   //void updateScore(int i);
+    Point p;
 public:
+    Board(bool game = true) { head = nullptr; tail = nullptr; nodesCount = 0; p = Point(game); }
+    //Board& operator=(Board& tetro) {} need to inplment!!
     int nodesCount = 0;
     unsigned int score = 0;
+    
     void updateScore(int i);
-    Board() { head = nullptr; tail = nullptr; nodesCount = 0; };
     void addToHead(ListNode* node);
     void addToTail(ListNode* node);
     void removeFromTail();
     void removeFromHead();
     void removeFromMiddle(ListNode* node);
-    void remove(vector<ListNode*> arr);
+    void remove(ListNode** node);
     ListNode* getNodeFromIndex(int i);
-    //void removeFromIndexes(int i, int j);
     int count() const;
     void draw(int from = 0);
+    void erase();
     void eraseLine(int y);
     void init();
 };
