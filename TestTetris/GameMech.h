@@ -1,28 +1,23 @@
-#pragma once
 #ifndef TETRIS_GAMEMECH_H
 #define TETRIS_GAMEMECH_H
 
-//#include "MasterHeader.h"
 #include "Clock.h"
 #include "Tetromino.h"
-//#include "Board.h"
-//#include "Point.h"
 
 
 class GameMech {
+    bool game;
 public:
+    GameMech(bool b = true) { game = b; lunch(); }
     Board board;
     Tetromino next;
     Tetromino curr;
-    void drawBorder(int minx, int miny, bool isGameBorder);
-    void init(Board* board);
-    void runGame(Clock* clock, bool p1);
-    void freeMemory();
-    //void updateScore(int i);
+    void run(bool isDropped);
+    void lunch();
 
-    static constexpr int MIN_Y = 3;
-    static constexpr int MIN_X = 10;
-    static constexpr int MIN_X1 = 9;
-    static constexpr int MIN_X2 = 55;
+    static constexpr int STARTING_X = 5;
+    static constexpr int STARTING_Y = -1;
+    static constexpr int NEXT_X = 21;
+    static constexpr int NEXT_Y = 3;
 };
 #endif //TETRIS_GAMEMECH_H

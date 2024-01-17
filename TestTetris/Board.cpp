@@ -21,7 +21,7 @@ void Board::addToTail(ListNode* node) {
     tail = node;
     nodesCount++;
 }
-void Board::removeFromTail() { // Necessary?
+void Board::removeFromTail() {
     tail = tail->prev;
     tail->next->deleteNode();
     tail->next = nullptr;
@@ -48,54 +48,26 @@ void Board::removeFromMiddle(ListNode* node) {
 }
 
 ListNode* Board::getNodeFromIndex(int i) {
-    
+
     int y = GAME_HEIGHT - nodesCount;
     ListNode* node = head;
-    while (y != i && node->next!=nullptr) {
+    while (y != i && node->next != nullptr) {
         ++y;
         node = node->next;;
     }
     return node;
-    
-    //if (i >= GAME_HEIGHT - 1 || nodesCount == 1)
-    //    return tail;
-    //ListNode* curr = nullptr;
-    //for (int j = GAME_HEIGHT - 1; j != i; ++j) {
-    //    if (curr == nullptr) curr = tail;
-    //    else curr = curr->next;
-    //}
-    //return curr;
 }
-//void Board::removeFromIndexes(int i, int j = -1) { // Need to test
-//    j = j == -1 ? i : j;
-//    updateScore(i - j+1);
-//    ListNode* curr = getNodeFromIndex(i);
-//    ListNode* saver = curr->prev;
-//    while (i >= j) {
-//        if (i == 0) {
-//            removeFromHead();
-//        }
-//        else {
-//            curr = curr->next;
-//            curr->prev->deleteNode();
-//            nodesCount--;
-//            i--;
-//        }
-//    }
-//    curr->prev = saver;
-//    if (curr->prev == nullptr)
-//        head = curr;
-//    else
-//        curr->prev->next = curr;
-//}
 
 int Board::count() const {
     return nodesCount;
 }
 
+void Board::erase() {
+    for (int i = GAME_HEIGHT - 1; i >= 0; i--) eraseLine(i);
+}
+
 void Board::draw(int from) { //draws board from the bottom, begin with "GAME_HEIGHT - from - 1"
     ListNode* node = tail;
-    Point p;
     for (int i = GAME_HEIGHT - from - 1; i >= 0 && node != nullptr; --i, node = node->prev) {
         p.init(0, i);
         for (int j = 0; j < GAME_WIDTH;++j) {
@@ -120,17 +92,17 @@ void Board::updateScore(int i) {
     }
 }
 
-void Board::remove(vector<ListNode*> arr) {
-    updateScore(arr.size());
-    for (ListNode* temp : arr) {
-        if (temp == head) removeFromHead();
-        else if (temp == tail) removeFromTail();
-        else removeFromMiddle(temp);
+void Board::remove(ListNode** filledNodes) {
+    int i = 0;
+    while (filledNodes[i] != nullptr) {
+        if (filledNodes[i] == head) removeFromHead();
+        else if (filledNodes[i] == tail) removeFromTail();
+        else removeFromMiddle(filledNodes[i]);
+        i++;
     }
 }
 
 void Board::eraseLine(int y) {
-    Point p;
     p.init(0, y);
     p.draw(' ');
     cout << "           ";
