@@ -9,6 +9,7 @@ class GameMech {
     bool game;
 public:
     GameMech(bool b = true) { game = b; lunch(); }
+
     Board board;
     Tetromino next;
     Tetromino curr;

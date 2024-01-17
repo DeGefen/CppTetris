@@ -4,13 +4,18 @@
 #include "Line.h"
 
 class ListNode {
+    void setNewNode();
 public:
     ListNode() { setNewNode(); }
+    ListNode(const ListNode& node) = delete;
+    ListNode operator=(const ListNode& node) = delete;
+
+    void deleteNode();
+
+
     Line* line;
     ListNode* next = nullptr;
     ListNode* prev = nullptr;
-    void setNewNode();
-    void deleteNode();
 };
 
 #endif //TETRIS_LISTNODE_H

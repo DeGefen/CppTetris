@@ -17,7 +17,7 @@ using namespace std;
 class Line {
 public:
     string arr = EMPTY_LINE;
-    unsigned short countFilled = 0;
+    unsigned short countFilled;
     void setNewLine();
     void printLine();
     bool canIntersectLines(Line* line2, bool makeChange = true);

@@ -94,8 +94,8 @@ void Board::updateScore(int i) {
         break;
     default: {}
     }
-    if (isGame1) drawScore(Point::MIN_X1 + (6 + GAME_WIDTH), 15);
-    else  drawScore(Point::MIN_X2 + (6 + GAME_WIDTH), 15);
+    if (isGame1) drawScore(Point::MIN_X1 + (5 + GAME_WIDTH), 13);
+    else  drawScore(Point::MIN_X2 + (5 + GAME_WIDTH), 13);
 }
 
 void Board::drawScore(int minx, int miny)
@@ -106,8 +106,6 @@ void Board::drawScore(int minx, int miny)
         gotoxy(minx, miny);
 
         std::cout << "Score: " << score << std::endl;
-
-        //cout << minutes << ':' << seconds;
     }
 }
 
@@ -125,12 +123,4 @@ void Board::eraseLine(int y) {
     p.init(0, y);
     p.draw(' ');
     cout << "           ";
-}
-
-void Board::init()
-{
-    this->head = nullptr;
-    this->tail = nullptr;
-    this->nodesCount = 0;
-    score = 0;
 }

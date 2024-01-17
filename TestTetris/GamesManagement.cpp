@@ -2,14 +2,18 @@
 
 void GamesManagement::drawBorders() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
-    gotoxy(0, 0);
-    cout << "	Player 1:	  Next Shape:";
-    if(twoGames) cout << "		      Player2:	        Next Shape : ";
-	drawBordersAUX(Point::MIN_X1, 2, _GAME_BORDER);
-    drawBordersAUX(Point::MIN_X1 + 6 + GAME_WIDTH, 2, _NEXT_TETRO_BORDER);
+    gotoxy(Point::MIN_X1-1, Point::MIN_Y - 2);
+    cout << "Player1:          Next Shape: ";
+
+    if (twoGames) { 
+        gotoxy(Point::MIN_X2-1, Point::MIN_Y - 2);
+        cout << "Player2:          Next Shape: ";
+    }
+	drawBordersAUX(Point::MIN_X1, Point::MIN_Y, _GAME_BORDER);
+    drawBordersAUX(Point::MIN_X1 + 6 + GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER);
     if (twoGames) {
-        drawBordersAUX(Point::MIN_X2, 2, _GAME_BORDER);
-        drawBordersAUX(Point::MIN_X2 + 6 + GAME_WIDTH, 2, _NEXT_TETRO_BORDER);
+        drawBordersAUX(Point::MIN_X2, Point::MIN_Y, _GAME_BORDER);
+        drawBordersAUX(Point::MIN_X2 + 6 + GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER);
     }
 };
 
@@ -79,7 +83,7 @@ void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& co
         }
     }
     continueGame = false;
-    endScreen();
+    endGame();
 }
 
 void GamesManagement::movment(int key) {
@@ -111,7 +115,7 @@ void GamesManagement::movment(int key) {
             break;
         }
     }
-    if (twoGames & !dropped2) {
+    if (twoGames && !dropped2) {
         switch (key) {
         case (int)eKeys2::LEFT:
         case (int)eKeys2::LEFT + CAPITAL:
@@ -146,4 +150,63 @@ void GamesManagement::lunch(bool isTwoGames) {
     counter = 0; threshHold = _DEFAULT_SPEED; reachedThreshHold = 0; twoGames = isTwoGames;
     game1 = GameMech(true);
     if (isTwoGames) game2 = GameMech(false);
+}
+
+void GamesManagement::endGame() {
+    if (!twoGames) {
+        winner(3);
+        return;
+    }
+    if (!game1_alive && !game2_alive){
+        if (game1.board.score > game2.board.score)
+            winner(1);
+        else if (game1.board.score < game2.board.score)
+            winner(2);
+        else winner(3);
+        return;
+    }
+    if (!game1_alive) winner(2);
+    if (!game2_alive) winner(1);
+}
+
+void GamesManagement::winner(int n) {
+    setColor(getColor('w'));
+    system("cls");
+    std::cout << "-----------------Winner----------------" << std::endl;
+    std::cout << "\n";
+    switch (n) {
+    case 1:
+        std::cout << "  /////////////             /////      " << std::endl;
+        std::cout << "  ############///         //####//     " << std::endl;
+        std::cout << "  ###############//    ///######//     " << std::endl;
+        std::cout << "  ####//     ####//    #########//     " << std::endl;
+        std::cout << "  ####///////####//         ####//     " << std::endl;
+        std::cout << "  ##############//          ####//     " << std::endl;
+        std::cout << "  ###########/              ####//     " << std::endl;
+        std::cout << "  ####//                    ####//     " << std::endl;
+        std::cout << "  ####//               /////####////// " << std::endl;
+        std::cout << "  ####//               ##############//" << std::endl;
+        std::cout << "  ####/                ##############/ " << std::endl;
+        break;
+    case 2:
+        std::cout << "  /////////////          ///////////    " << std::endl;
+        std::cout << "  ############///      //##########//   " << std::endl;
+        std::cout << "  ###############//  //##############// " << std::endl;
+        std::cout << "  ####//     ####//  #####//     #####//" << std::endl;
+        std::cout << "  ####///////####//  ####/      /####// " << std::endl;
+        std::cout << "  ##############//           ///####//  " << std::endl;
+        std::cout << "  ###########/            ///####//     " << std::endl;
+        std::cout << "  ####//               ///####//        " << std::endl;
+        std::cout << "  ####//             //####//////////// " << std::endl;
+        std::cout << "  ####//             #################//" << std::endl;
+        std::cout << "  ####/              #################/ " << std::endl;
+        break;
+    case 3:
+        std::cout << "\n\n\n\n\n                Tetrip :(" << std::endl;
+        break;
+    }
+    std::cout << "\n";
+    std::cout << "-----------------Winner----------------" << std::endl;
+    Sleep(4000);
+    system("cls");
 }

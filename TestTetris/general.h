@@ -9,8 +9,6 @@
 #include <Windows.h>
 using namespace std;
 
-#define SPACE ' '
-//#define NUM_OF_CORDS 3
 void gotoxy(int, int);
 void clrscr();
 int getColor(char c);
