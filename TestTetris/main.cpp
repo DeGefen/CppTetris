@@ -10,7 +10,7 @@ int main() {
 	//menuControl();
 	GamesManagement games;
 	//Sleep(50000);
-	games.runGames();
+	games.start();
 	Sleep(10000);
 	//games.drawBorders();
 	//Clock clock;

@@ -10,8 +10,8 @@ void GamesManagement::drawBorders() {
 };
 
 void GamesManagement::runGames() {
-    menuControl();
-    drawBorders();
+    //menuControl();
+    //drawBorders();
 	//game1->runGame(&clock, true);
 	//game2->runGame(&clock, true);
     srand((time(0)));
@@ -28,6 +28,14 @@ void GamesManagement::runGames() {
     }
 
 
+}
+
+void GamesManagement::start() {
+    //louding_screen(0);
+    bool twolayerMode = true, colorsMode = true;
+    bool continueGame = menuControl(twolayerMode, colorsMode);
+    drawBorders();
+    runGames();
 }
 
 void movment(int key) {

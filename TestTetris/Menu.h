@@ -13,7 +13,7 @@ enum class menuOptions { CONTINUE, START, COLORS, TWO_PLAYERS_MODE, INSTRUCTIONS
 void louding_screen(int n);
 void drawMenu(bool newGame = true);
 void displayMenu(int selectedOption, bool colorsOn = true, bool twoPlayers = true);
-int menuControl();
+bool menuControl(bool& twoPlayerMode, bool& colorsMode); // Return true if player selects continue, otherwise start new game
 void setColor(int colorCode);
 void showInstructions();
 void endScreen();

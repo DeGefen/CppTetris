@@ -80,29 +80,29 @@ void setColor(int colorCode) {
 void displayMenu(int selectedOption, bool colorsOn, bool twoPlayers) {
     string menuOptionsNames[] = {"CONTINUE GAME", "START NEW GAME", "COLORS", "TWO PLAYERS MODE", "INSTRUCTIONS", "EXIT"};
     string toggleNames[] = { "OFF", "ON"};
-    system("cls");  // Clear the screen (works on Windows, may need adjustment for other platforms)
-    std::cout << "Menu:\n";
+    system("cls");
+    std::cout << "\n\n                                              Menu:\n\n";
     for (int i = 0; i < 6; ++i) {
         setColor(selectedOption == i ? 10 : 7); // 10 is green, 7 is default color
         if (i == 2) {
-            std::cout << menuOptionsNames[i] <<": " << toggleNames[colorsOn] << "\n";
+            std::cout << "                                          " << menuOptionsNames[i] <<": " << toggleNames[colorsOn] << "\n\n";
         } else if (i == 3) {
-            std::cout << menuOptionsNames[i] << ": " << toggleNames[twoPlayers] << "\n";
+            std::cout << "                                          " << menuOptionsNames[i] << ": " << toggleNames[twoPlayers] << "\n\n";
         }
         else {
-            std::cout << menuOptionsNames[i] << "\n";
+            std::cout << "                                          " << menuOptionsNames[i] << "\n\n";
         }  
     }
     setColor(7); // Reset to default color
 }
 
-int menuControl() {
+bool menuControl(bool& twoPlayerMode, bool& colorsMode) {
     char choice;
     int selectedOption = 0;
-    bool colorsOn = true;
-    bool twoPlayersOn = true;
+    //bool colorsOn = true;
+    //bool twoPlayersOn = true;
     do {
-        displayMenu(selectedOption, colorsOn, twoPlayersOn);
+        displayMenu(selectedOption, colorsMode, twoPlayerMode);
         std::cout << "\n\n Use W, S and ENTER to navigate ";
         choice = _getch();
 
@@ -118,10 +118,10 @@ int menuControl() {
             break;
         case(int)menuKeys::ENTER:
             if (selectedOption == 2) {
-                colorsOn = !colorsOn;
+                colorsMode = !colorsMode;
                 // TODO: toggle colors here
             } else if (selectedOption == 3) {
-                twoPlayersOn = !twoPlayersOn;
+                twoPlayerMode = !twoPlayerMode;
                 // TODO: toggle twoPlayersOn here
             } else if (selectedOption == 4) {
                 showInstructions();
@@ -137,12 +137,12 @@ int menuControl() {
     }
     std::cout << "You selected Option " << selectedOption << ".\n";
     system("cls");
-    return selectedOption;
+    return (bool)selectedOption;
 }
 
 void showInstructions() {
     system("cls");
-    std::cout << "                                           GAME INSTRUCTIONS:  " << std::endl << std::endl;
+    std::cout << "\n                                           GAME INSTRUCTIONS:  " << std::endl << std::endl;
     std::cout << "               Arrange falling tetrominoes to create complete horizontal lines. Use your keys to " << std::endl;
     std::cout << "               move left, right, rotate the shapes or accelerate the descent. When horzintal lines" << std::endl;
     std::cout << "                                       are complete they are cleared." << std::endl;
@@ -156,13 +156,6 @@ void showInstructions() {
     std::cout << "       Rotate Counter-Clockwise:       W           |               I" << std::endl<< std::endl;
     std::cout << "       Drop:                           X           |               M" << std::endl<< std::endl;
     std::cout << "       Pause Game:                    ESC          |              ESC" << std::endl << std::endl;
-
-    //std::cout << "      #####//         #####/////////////          #####//         #####//////#####/    #####//   #####///////////// " << std::endl;
-    //std::cout << "      #####//         #################//         #####//         ###########//        #####//   #################//" << std::endl;
-    //std::cout << "      #####//         #################/          #####//         ###########//////    #####//   #################//" << std::endl;
-    //std::cout << "      #####//         #####//                     #####//         #####//    #####//   #####//               #####//" << std::endl;
-    //std::cout << "      #####//         #####/////////////          #####//         #####//    #####//   #####//   ////////////#####//" << std::endl;
-    //std::cout << "      #####//         #################//         #####//         #####//    #####//   #####//   #################//" << std::endl;
     std::cout << "      press any key to return to menu " << std::endl;
     char choice = _getch();
 };

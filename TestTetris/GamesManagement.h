@@ -22,6 +22,7 @@ class GamesManagement {
 public:
     void drawBorders();
     void runGames();
+    void start();
     void movment(char key);
 };
 #endif
