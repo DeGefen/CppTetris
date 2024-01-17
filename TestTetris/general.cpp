@@ -21,7 +21,7 @@ void clrscr()
 
 int getColor(char c) {
 	static bool color_mod = true;
-	int color;
+	int color = 0x0F;
 	switch (c) {
 	case 'I':
 		color = 0xBB;
@@ -46,6 +46,9 @@ int getColor(char c) {
 		break;
 	case 'G':
 		color = 0x88;
+		break;
+	case 'g':
+		color = 0x08;
 		break;
 	case ' ':
 		color = 0x00;
