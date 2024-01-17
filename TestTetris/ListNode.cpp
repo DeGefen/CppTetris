@@ -1,6 +1,3 @@
-//
-// Created by Eylon Serok on 07/01/2024.
-//
 #include "ListNode.h"
 #include "Line.h"
 

@@ -31,7 +31,6 @@ void Clock::drawClock(int minx, int miny)
 	}
 	std::cout << seconds << std::endl;
 
-	//cout << minutes << ':' << seconds;
 }
 
 void Clock::reset() {

@@ -14,29 +14,39 @@
 #endif //TETRIS_Board_H
 
 class Board {
-    ListNode* head = nullptr;
-    ListNode* tail = nullptr;
-    Point p;
-    bool isGame1;
 public:
-    Board(bool game = true) { head = nullptr; tail = nullptr; nodesCount = 0; score = 0; p = Point(game); isGame1 = game; }
-    //Board& operator=(Board& tetro) {} need to inplment!!
-    int nodesCount = 0;
+    Board(bool game = true) {
+        head = nullptr;
+        tail = nullptr;
+        nodesCount = 0;
+        score = 0;
+        p = Point(game);
+        isGame1 = game; }
+
     unsigned int score = 0;
 
-
     void updateScore(int i);
-    void drawScore(int minx, int miny);
     void addToHead(ListNode* node);
     void addToTail(ListNode* node);
-    void removeFromTail();
-    void removeFromHead();
-    void removeFromMiddle(ListNode* node);
     void remove(ListNode** node);
     ListNode* getNodeFromIndex(int i);
     int count() const;
     void draw(int from = 0);
     void erase();
+
+private:
+    ListNode* head = nullptr;
+    ListNode* tail = nullptr;
+    Point p;
+    bool isGame1;
+    int nodesCount;
+
+    void removeFromTail();
+    void removeFromHead();
+    void removeFromMiddle(ListNode* node);
+
+    void drawScore(int minx, int miny);
     void eraseLine(int y);
-    void init();
+
+
 };

@@ -127,6 +127,7 @@ bool Tetromino::move(Board& board) { // returns true if moved tetro down, false 
 ListNode* Tetromino::placeTetro(Board& board, Line* tetroLine, int y) {
     if (y <= GAME_HEIGHT - board.count() - 1) {
         auto* tetroNode = new ListNode;
+        delete tetroNode->line; //delete double memory alloction
         tetroNode->line = tetroLine;
         board.addToHead(tetroNode);
         return nullptr;
