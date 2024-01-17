@@ -4,10 +4,10 @@ void GamesManagement::drawBorders() {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
     gotoxy(0, 0);
     cout << "	Player 1:	  Next Shape:";
+    if(twoGames) cout << "		      Player2:	        Next Shape : ";
 	drawBordersAUX(Point::MIN_X1, 2, _GAME_BORDER);
     drawBordersAUX(Point::MIN_X1 + 6 + GAME_WIDTH, 2, _NEXT_TETRO_BORDER);
     if (twoGames) {
-        cout << "		      Player2:	        Next Shape : ";
         drawBordersAUX(Point::MIN_X2, 2, _GAME_BORDER);
         drawBordersAUX(Point::MIN_X2 + 6 + GAME_WIDTH, 2, _NEXT_TETRO_BORDER);
     }
@@ -41,6 +41,7 @@ void GamesManagement::drawBordersAUX(int minx, int miny, bool isGameBorder) {
 
 void GamesManagement::runGames() {
     dropped1 = dropped2 = false;
+    game1_alive = game2_alive = true;
     game1.next.jumpTo(GameMech::NEXT_X,GameMech::NEXT_Y);
     game1.next.draw();
     if (twoGames) { 
@@ -49,7 +50,7 @@ void GamesManagement::runGames() {
     }
 
     drawBorders();
-    while (true) {
+    while (game1_alive && game2_alive) {
         int keyPressed = 0;
         if (_kbhit()) {
             keyPressed = _getch();
@@ -61,9 +62,9 @@ void GamesManagement::runGames() {
         if (++counter == threshHold) {
             counter = 0;
             reachedThreshHold++;
-            game1.run(dropped1);
+            game1_alive = game1.run(dropped1);
             if (twoGames)
-                game2.run(dropped2);
+                game1_alive = game2.run(dropped2);
             dropped1 = dropped2 = false;
         }
         if (reachedThreshHold == _SPEED_UP && threshHold>=_MAX_SPEED) {
