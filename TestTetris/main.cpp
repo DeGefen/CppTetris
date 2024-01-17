@@ -1,5 +1,5 @@
 #include <Windows.h>
-#include "GamesManagement.h"
+#include "Runner.h"
 #include "Menu.h"
 #include <cstdlib>
 
@@ -7,8 +7,8 @@ using namespace std;
 
 int main() {
 	//louding_screen(0);
-	//menuControl();
-	GamesManagement games;
+	//bool twoGamess = menuControl();
+	Runner games;
 	//Sleep(50000);
 	games.start();
 	Sleep(10000);

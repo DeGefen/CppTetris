@@ -69,7 +69,11 @@ void drawMenu(bool newGame) {
 }
 
 void endScreen() {
-    std::cout << "Tetrip :(" << std::endl;
+
+    setColor(7);
+    system("cls");                                          
+    std::cout << "\n\n\n\n\n\n\n                                           Tetrip :(" << std::endl;
+    Sleep(2000);
 }
 
 
@@ -77,12 +81,12 @@ void setColor(int colorCode) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colorCode);
 }
 
-void displayMenu(int selectedOption, bool colorsOn, bool twoPlayers) {
+void displayMenu(int selectedOption, bool colorsOn, bool twoPlayers, bool firstTime) {
     string menuOptionsNames[] = {"CONTINUE GAME", "START NEW GAME", "COLORS", "TWO PLAYERS MODE", "INSTRUCTIONS", "EXIT"};
     string toggleNames[] = { "OFF", "ON"};
     system("cls");
     std::cout << "\n\n                                              Menu:\n\n";
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0 + firstTime; i < 6; ++i) {
         setColor(selectedOption == i ? 10 : 7); // 10 is green, 7 is default color
         if (i == 2) {
             std::cout << "                                          " << menuOptionsNames[i] <<": " << toggleNames[colorsOn] << "\n\n";
@@ -96,22 +100,23 @@ void displayMenu(int selectedOption, bool colorsOn, bool twoPlayers) {
     setColor(7); // Reset to default color
 }
 
-bool menuControl(bool& twoPlayerMode, bool& colorsMode) {
+bool menuControl(bool& twoPlayerMode, bool& colorsMode, bool firstTime) {
+    setColor(0);
     char choice;
     int selectedOption = 0;
     //bool colorsOn = true;
     //bool twoPlayersOn = true;
     do {
-        displayMenu(selectedOption, colorsMode, twoPlayerMode);
+        displayMenu(selectedOption, colorsMode, twoPlayerMode, firstTime);
         std::cout << "\n\n Use W, S and ENTER to navigate ";
         choice = _getch();
 
         switch (choice) {
         case (int)menuKeys::UP:
-            selectedOption == 0 ? selectedOption = 5 : selectedOption--;
+            selectedOption == 0 + firstTime ? selectedOption = 5 : selectedOption--;
             break;
         case (int)menuKeys::DOWN:
-            selectedOption == 5 ? selectedOption = 0 : selectedOption++;
+            selectedOption == 5 ? selectedOption = 0 + firstTime : selectedOption++;
             break;
         case (int)menuKeys::ESC:
             selectedOption = 5;
@@ -119,10 +124,9 @@ bool menuControl(bool& twoPlayerMode, bool& colorsMode) {
         case(int)menuKeys::ENTER:
             if (selectedOption == 2) {
                 colorsMode = !colorsMode;
-                // TODO: toggle colors here
+                getColor('@');
             } else if (selectedOption == 3) {
                 twoPlayerMode = !twoPlayerMode;
-                // TODO: toggle twoPlayersOn here
             } else if (selectedOption == 4) {
                 showInstructions();
             }
@@ -137,7 +141,7 @@ bool menuControl(bool& twoPlayerMode, bool& colorsMode) {
     }
     std::cout << "You selected Option " << selectedOption << ".\n";
     system("cls");
-    return (bool)selectedOption;
+    return !selectedOption;
 }
 
 void showInstructions() {

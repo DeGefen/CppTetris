@@ -17,13 +17,16 @@ class Board {
     ListNode* head= nullptr;
     ListNode* tail = nullptr;
     Point p;
+    bool isGame1 = true;
 public:
     Board(bool game = true) { head = nullptr; tail = nullptr; nodesCount = 0; p = Point(game); }
     //Board& operator=(Board& tetro) {} need to inplment!!
     int nodesCount = 0;
     unsigned int score = 0;
     
+    
     void updateScore(int i);
+    void drawScore(int minx, int miny);
     void addToHead(ListNode* node);
     void addToTail(ListNode* node);
     void removeFromTail();

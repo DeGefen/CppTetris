@@ -76,6 +76,7 @@ void Board::draw(int from) { //draws board from the bottom, begin with "GAME_HEI
                     p.draw(node->line->arr[j]);
             }
         }
+    drawScore(30, 15);
 }
 
 void Board::updateScore(int i) {
@@ -89,6 +90,22 @@ void Board::updateScore(int i) {
     case 4:
         score += 1200;
     default: {}
+    }
+    drawScore(Point::MIN_X1 + (6 + GAME_WIDTH
+        //+ )(1 + this.ggame)
+        ), 15);
+}
+
+void Board::drawScore(int minx, int miny)
+{
+    {
+        int backcolor = getColor('g');
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
+        gotoxy(minx, miny);
+
+        std::cout << score << std::endl;
+
+        //cout << minutes << ':' << seconds;
     }
 }
 

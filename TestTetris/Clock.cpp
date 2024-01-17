@@ -17,7 +17,7 @@ void Clock::addMiliSeconds(unsigned int ms)
 
 void Clock::drawClock(int minx, int miny)
 {
-	int backcolor = getColor('G');
+	int backcolor = getColor('g');
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
 	gotoxy(minx, miny);
 

@@ -14,7 +14,9 @@ enum class eKeys2 { LEFT = 'j', RIGHT = 'l', ROTATE_CLOCKWISE = 'k', ROTATE_COUN
 class GamesManagement {
 public:
     GamesManagement(bool isTwoGames= true) { lunch(isTwoGames); }
-    void runGames();
+    //void runGames();
+    void drawBorders();
+    void runGames(bool& continueGame, bool& twoPlayerMode, bool& colorsMode);
 
 private:
     static constexpr int CAPITAL = 'A' - 'a';
@@ -46,9 +48,8 @@ private:
     void drawBordersAUX(int minx, int miny, bool isGameBorder);
     void movment(int key);
     void lunch(bool isTwoGames = true);
-    void drawBorders();
-    void runGames();
-    void start();
+    
+    
     void movment(char key);
 };
 #endif
