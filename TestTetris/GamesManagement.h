@@ -40,6 +40,8 @@ private:
     bool twoGames;
     bool dropped1;
     bool dropped2;
+    bool game1_alive;
+    bool game2_alive;
 
     void drawBordersAUX(int minx, int miny, bool isGameBorder);
     void movment(int key);

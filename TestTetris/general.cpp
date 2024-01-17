@@ -20,6 +20,7 @@ void clrscr()
 }
 
 int getColor(char c) {
+	static bool color_mod = true;
 	int color;
 	switch (c) {
 	case 'I':
@@ -49,9 +50,14 @@ int getColor(char c) {
 	case ' ':
 		color = 0x00;
 		break;
+	case '@':
+		if (color_mod) color_mod = false;
+		else color_mod = true;
+		break;
 	default:
 		color = 0x0F;
 		break;
 	}
+	if (!color_mod) return 0x0F;
 	return color;
 };

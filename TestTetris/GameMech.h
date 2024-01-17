@@ -12,7 +12,7 @@ public:
     Board board;
     Tetromino next;
     Tetromino curr;
-    void run(bool isDropped);
+    bool run(bool isDropped);
     void lunch();
 
     static constexpr int STARTING_X = 5;

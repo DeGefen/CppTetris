@@ -5,7 +5,7 @@
 #include "general.h"
 #include "GamesManagement.h"
 
-void GameMech::run(bool isDropped) {
+bool GameMech::run(bool isDropped) { //return false if player lost
 	if (isDropped || !curr.move(board)) {
 		next.erase();
 		curr = next;
@@ -16,6 +16,8 @@ void GameMech::run(bool isDropped) {
 		next.draw();
 	}
 	board.draw();
+	if (board.count() >= GAME_HEIGHT)	return false;
+	return true;
 }
 
 void GameMech::lunch() {
