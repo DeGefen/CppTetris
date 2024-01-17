@@ -39,7 +39,7 @@ void GamesManagement::drawBordersAUX(int minx, int miny, bool isGameBorder) {
     }
 }
 
-void GamesManagement::runGames() {
+void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& colorsMode) {
     dropped1 = dropped2 = false;
     game1_alive = game2_alive = true;
     game1.next.jumpTo(GameMech::NEXT_X,GameMech::NEXT_Y);
@@ -54,8 +54,13 @@ void GamesManagement::runGames() {
         int keyPressed = 0;
         if (_kbhit()) {
             keyPressed = _getch();
-            if (keyPressed == (int)eKeys1::ESC)
-                break;
+            if (keyPressed == (int)eKeys1::ESC) {
+                continueGame = menuControl(twoPlayerMode, colorsMode);
+                if (continueGame)
+                    drawBorders();
+                else
+                    return;
+            }
             movment(keyPressed);
         }
         clock.addMiliSeconds(50);
@@ -64,7 +69,7 @@ void GamesManagement::runGames() {
             reachedThreshHold++;
             game1_alive = game1.run(dropped1);
             if (twoGames)
-                game1_alive = game2.run(dropped2);
+                game2_alive = game2.run(dropped2);
             dropped1 = dropped2 = false;
         }
         if (reachedThreshHold == _SPEED_UP && threshHold>=_MAX_SPEED) {
@@ -72,7 +77,23 @@ void GamesManagement::runGames() {
             reachedThreshHold = 0;
         }
     }
+    continueGame = false;
+    endScreen();
 }
+//        Sleep(500);
+//
+//    }
+//
+//
+//}
+
+//void GamesManagement::start() {
+//    //louding_screen(0);
+//    bool twolayerMode = true, colorsMode = true;
+//    bool continueGame = menuControl(twolayerMode, colorsMode);
+//    drawBorders();
+//    runGames();
+//}
 
 void GamesManagement::movment(int key) {
     if (!dropped1) {
