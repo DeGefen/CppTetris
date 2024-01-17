@@ -1,7 +1,7 @@
 #include "Runner.h"
 
 void Runner::start() {
-    //louding_screen(0);
+    louding_screen();
     bool twolayerMode = true, colorsMode = true,  continueGame;
     continueGame = menuControl(twolayerMode, colorsMode, true);
     while (true) {

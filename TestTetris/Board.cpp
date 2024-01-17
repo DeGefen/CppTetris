@@ -76,24 +76,26 @@ void Board::draw(int from) { //draws board from the bottom, begin with "GAME_HEI
                     p.draw(node->line->arr[j]);
             }
         }
-    drawScore(30, 15);
 }
 
 void Board::updateScore(int i) {
     switch (i) {
     case 1:
         score += 40;
+        break;
     case 2:
         score += 100;
+        break;
     case 3:
         score += 300;
+        break;
     case 4:
         score += 1200;
+        break;
     default: {}
     }
-    drawScore(Point::MIN_X1 + (6 + GAME_WIDTH
-        //+ )(1 + this.ggame)
-        ), 15);
+    if (isGame1) drawScore(Point::MIN_X1 + (6 + GAME_WIDTH), 15);
+    else  drawScore(Point::MIN_X2 + (6 + GAME_WIDTH), 15);
 }
 
 void Board::drawScore(int minx, int miny)
@@ -103,7 +105,7 @@ void Board::drawScore(int minx, int miny)
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
         gotoxy(minx, miny);
 
-        std::cout << score << std::endl;
+        std::cout << "Score: " << score << std::endl;
 
         //cout << minutes << ':' << seconds;
     }
