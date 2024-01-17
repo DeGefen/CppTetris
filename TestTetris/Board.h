@@ -17,9 +17,9 @@ class Board {
     ListNode* head = nullptr;
     ListNode* tail = nullptr;
     Point p;
-    bool isGame1 = true;
+    bool isGame1;
 public:
-    Board(bool game = true) { head = nullptr; tail = nullptr; nodesCount = 0; p = Point(game); }
+    Board(bool game = true) { head = nullptr; tail = nullptr; nodesCount = 0; score = 0; p = Point(game); isGame1 = game; }
     //Board& operator=(Board& tetro) {} need to inplment!!
     int nodesCount = 0;
     unsigned int score = 0;

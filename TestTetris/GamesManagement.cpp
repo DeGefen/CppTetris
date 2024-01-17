@@ -44,11 +44,12 @@ void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& co
     game1_alive = game2_alive = true;
     game1.next.jumpTo(GameMech::NEXT_X,GameMech::NEXT_Y);
     game1.next.draw();
+    game1.board.updateScore(0);
     if (twoGames) { 
         game2.next.jumpTo(GameMech::NEXT_X, GameMech::NEXT_Y);
         game2.next.draw();
+        game2.board.updateScore(0);
     }
-
     drawBorders();
     while (game1_alive && game2_alive) {
         int keyPressed = 0;
@@ -80,20 +81,6 @@ void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& co
     continueGame = false;
     endScreen();
 }
-//        Sleep(500);
-//
-//    }
-//
-//
-//}
-
-//void GamesManagement::start() {
-//    //louding_screen(0);
-//    bool twolayerMode = true, colorsMode = true;
-//    bool continueGame = menuControl(twolayerMode, colorsMode);
-//    drawBorders();
-//    runGames();
-//}
 
 void GamesManagement::movment(int key) {
     if (!dropped1) {
