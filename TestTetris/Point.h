@@ -1,6 +1,11 @@
-#pragma once
+#ifndef TETRIS_POINT_H
+#define TETRIS_POINT_H
 
-//#include "GameMech.h"
+#include <iostream>
+#include <Windows.h>
+#include "general.h"
+using namespace std;
+
 
 class Point {
 	int x;
@@ -18,4 +23,6 @@ public:
 	void init(int x, int y);
 	void draw(char ch);
 };
+
+#endif
 

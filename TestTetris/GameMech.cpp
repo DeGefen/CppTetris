@@ -1,9 +1,4 @@
-#include <windows.h> // for gotoxy
-#include <process.h> // for system
-#include <iostream>
-#include <conio.h>
-#include "general.h"
-#include "GamesManagement.h"
+#include "GameMech.h"
 
 bool GameMech::run(bool isDropped) { //return false if player lost
 	if (isDropped || !curr.move(board)) {

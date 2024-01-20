@@ -1,6 +1,4 @@
 #include "ListNode.h"
-#include "Line.h"
-
 
 void ListNode::setNewNode() {
     next = nullptr; prev = nullptr;

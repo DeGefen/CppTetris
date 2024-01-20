@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TETRIS_CLOCK_H
+#define TETRIS_CLOCK_H
+
 #include <Windows.h>
 #include "general.h"
 
@@ -13,3 +15,5 @@ public:
 	void drawClock(int minx, int miny);
 	void reset();
 };
+
+#endif

@@ -1,7 +1,4 @@
-#include <windows.h> // for gotoxy
-#include <process.h> // for system
-#include <iostream>
-using namespace std;
+#include "general.h"
 
 void gotoxy(int x, int y)
 {
@@ -44,19 +41,19 @@ int getColor(char c) {
 	case 'Z':
 		color = 0x44;
 		break;
-	case 'G':
+	case COLOR_BORDER:
 		color = 0x88;
 		break;
-	case 'g':
+	case COLOR_INFO:
 		color = 0x08;
 		break;
-	case 'w' :
-		color = 0x06;
+	case COLOR_TEXT :
+		color = 0x0A;
 		break;
 	case ' ':
 		color = 0x00;
 		break;
-	case '@':
+	case COLOR_MOD:
 		if (color_mod) color_mod = false;
 		else color_mod = true;
 		break;
