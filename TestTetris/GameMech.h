@@ -1,6 +1,11 @@
 #ifndef TETRIS_GAMEMECH_H
 #define TETRIS_GAMEMECH_H
 
+#include <windows.h> // for gotoxy
+#include <process.h> // for system
+#include <iostream>
+#include <conio.h>
+#include "general.h"
 #include "Clock.h"
 #include "Tetromino.h"
 

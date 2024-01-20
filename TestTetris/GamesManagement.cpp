@@ -1,6 +1,6 @@
 #include "GamesManagement.h"
 
-void GamesManagement::drawBorders() {
+void GamesManagement::drawBorders(char color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
     gotoxy(Point::MIN_X1-1, Point::MIN_Y - 2);
     cout << "Player1:          Next Shape: ";
@@ -9,18 +9,18 @@ void GamesManagement::drawBorders() {
         gotoxy(Point::MIN_X2-1, Point::MIN_Y - 2);
         cout << "Player2:          Next Shape: ";
     }
-	drawBordersAUX(Point::MIN_X1, Point::MIN_Y, _GAME_BORDER);
-    drawBordersAUX(Point::MIN_X1 + 6 + GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER);
+	drawBordersAUX(Point::MIN_X1, Point::MIN_Y, _GAME_BORDER, color);
+    drawBordersAUX(Point::MIN_X1 + 6 + GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER, color);
     if (twoGames) {
-        drawBordersAUX(Point::MIN_X2, Point::MIN_Y, _GAME_BORDER);
-        drawBordersAUX(Point::MIN_X2 + 6 + GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER);
+        drawBordersAUX(Point::MIN_X2, Point::MIN_Y, _GAME_BORDER, color);
+        drawBordersAUX(Point::MIN_X2 + 6 + GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER,color);
     }
 };
 
-void GamesManagement::drawBordersAUX(int minx, int miny, bool isGameBorder) {
+void GamesManagement::drawBordersAUX(int minx, int miny, bool isGameBorder, char color) {
     int width = isGameBorder ? GAME_WIDTH : NEXT_TET_WIDTH;
     int height = isGameBorder ? GAME_HEIGHT : NEXT_TET_HEIGHT;
-    int backcolor = getColor('G');
+    int backcolor = getColor(color);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
     {
         for (int col = minx; col < width + minx; col++)
@@ -43,7 +43,11 @@ void GamesManagement::drawBordersAUX(int minx, int miny, bool isGameBorder) {
     }
 }
 
-void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& colorsMode) {
+void GamesManagement::FlashBoarder() {
+
+}
+
+void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& colorsMode, bool& exit) {
     dropped1 = dropped2 = false;
     game1_alive = game2_alive = true;
     game1.next.jumpTo(GameMech::NEXT_X,GameMech::NEXT_Y);
@@ -60,9 +64,21 @@ void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& co
         if (_kbhit()) {
             keyPressed = _getch();
             if (keyPressed == (int)eKeys1::ESC) {
-                continueGame = menuControl(twoPlayerMode, colorsMode);
-                if (continueGame)
+                continueGame = menuControl(twoPlayerMode, colorsMode, exit);
+                if (exit) return;
+                if (continueGame) {
+                    game1.curr.draw();
+                    game1.next.draw();
+                    game1.board.draw();
+                    game1.board.updateScore(0);
+                    if (twoGames) {
+                        game2.next.draw();
+                        game2.next.draw();
+                        game2.board.draw();
+                        game2.board.updateScore(0);
+                    }
                     drawBorders();
+                }
                 else
                     return;
             }
@@ -82,7 +98,7 @@ void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& co
             reachedThreshHold = 0;
         }
     }
-    continueGame = false;
+    continueGame = true;
     endGame();
 }
 
@@ -170,43 +186,48 @@ void GamesManagement::endGame() {
 }
 
 void GamesManagement::winner(int n) {
-    setColor(getColor('w'));
+    setColor(getColor(COLOR_TEXT));
     system("cls");
-    std::cout << "-----------------Winner----------------" << std::endl;
+    std::cout << "\n\n\n\n\n                                    tetrip :(" << std::endl;
+    Sleep(1000);
+    system("cls");
+    std::cout << "\n\n\n                    -----------------Winner----------------" << std::endl;
     std::cout << "\n";
     switch (n) {
     case 1:
-        std::cout << "  /////////////             /////      " << std::endl;
-        std::cout << "  ############///         //####//     " << std::endl;
-        std::cout << "  ###############//    ///######//     " << std::endl;
-        std::cout << "  ####//     ####//    #########//     " << std::endl;
-        std::cout << "  ####///////####//         ####//     " << std::endl;
-        std::cout << "  ##############//          ####//     " << std::endl;
-        std::cout << "  ###########/              ####//     " << std::endl;
-        std::cout << "  ####//                    ####//     " << std::endl;
-        std::cout << "  ####//               /////####////// " << std::endl;
-        std::cout << "  ####//               ##############//" << std::endl;
-        std::cout << "  ####/                ##############/ " << std::endl;
+        std::cout << "                      /////////////             /////      " << std::endl;
+        std::cout << "                      ############///         //####//     " << std::endl;
+        std::cout << "                      ###############//    ///######//     " << std::endl;
+        std::cout << "                      ####//     ####//    #########//     " << std::endl;
+        std::cout << "                      ####///////####//         ####//     " << std::endl;
+        std::cout << "                      ##############//          ####//     " << std::endl;
+        std::cout << "                      ###########/              ####//     " << std::endl;
+        std::cout << "                      ####//                    ####//     " << std::endl;
+        std::cout << "                      ####//               /////####////// " << std::endl;
+        std::cout << "                      ####//               ##############//" << std::endl;
+        std::cout << "                      ####/                ##############/ " << std::endl;
         break;
     case 2:
-        std::cout << "  /////////////          ///////////    " << std::endl;
-        std::cout << "  ############///      //##########//   " << std::endl;
-        std::cout << "  ###############//  //##############// " << std::endl;
-        std::cout << "  ####//     ####//  #####//     #####//" << std::endl;
-        std::cout << "  ####///////####//  ####/      /####// " << std::endl;
-        std::cout << "  ##############//           ///####//  " << std::endl;
-        std::cout << "  ###########/            ///####//     " << std::endl;
-        std::cout << "  ####//               ///####//        " << std::endl;
-        std::cout << "  ####//             //####//////////// " << std::endl;
-        std::cout << "  ####//             #################//" << std::endl;
-        std::cout << "  ####/              #################/ " << std::endl;
+        std::cout << "                      /////////////          ///////////    " << std::endl;
+        std::cout << "                      ############///      //##########//   " << std::endl;
+        std::cout << "                      ###############//  //##############// " << std::endl;
+        std::cout << "                      ####//     ####//  #####//     #####//" << std::endl;
+        std::cout << "                      ####///////####//  ####/      /####// " << std::endl;
+        std::cout << "                      ##############//           ///####//  " << std::endl;
+        std::cout << "                      ###########/            ///####//     " << std::endl;
+        std::cout << "                      ####//               ///####//        " << std::endl;
+        std::cout << "                      ####//             //####//////////// " << std::endl;
+        std::cout << "                      ####//             #################//" << std::endl;
+        std::cout << "                      ####/              #################/ " << std::endl;
         break;
     case 3:
-        std::cout << "\n\n\n\n\n                Tetrip :(" << std::endl;
+        std::cout << "\n\n\n                                    nobody...\n\n" << std::endl;
         break;
     }
     std::cout << "\n";
-    std::cout << "-----------------Winner----------------" << std::endl;
-    Sleep(4000);
-    system("cls");
+    std::cout << "                    -----------------Winner----------------\n\n\n\n\n\n\n" << std::endl;
+    Sleep(500);
+    std::cout << "      press any key to return to menu ";
+    char choice = _getch();
+ system("cls");
 }

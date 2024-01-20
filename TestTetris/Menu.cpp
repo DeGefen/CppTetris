@@ -1,7 +1,4 @@
 #include "Menu.h"
-#include "Windows.h"
-#include "stdlib.h"
-
 
 void louding_screen() {
     srand(time(0));
@@ -21,11 +18,11 @@ void louding_screen() {
     
     gotoxy(0, 17);
 
-    std::cout << " ###########################################################################  " << std::endl;
-    std::cout << " #                                                                         #  " << std::endl;
-    std::cout << " ###########################################################################  " << std::endl;
+    std::cout << "  ###########################################################################  " << std::endl;
+    std::cout << "  #                                                                         #  " << std::endl;
+    std::cout << "  ###########################################################################  " << std::endl;
 
-    gotoxy(2, 18);
+    gotoxy(3, 18);
     for (int i = 0; i< 71; ++i) {
         Sleep(25+(rand()%100));
         std::cout << '|';
@@ -34,7 +31,7 @@ void louding_screen() {
     std::cout << '|';
     Sleep(500);
     std::cout << '|';
-
+    Sleep(75);
 
     gotoxy(0, 26);
     
@@ -82,40 +79,51 @@ void setColor(int colorCode) {
 }
 
 void displayMenu(int selectedOption, bool colorsOn, bool twoPlayers, bool firstTime) {
-    string menuOptionsNames[] = {"CONTINUE GAME", "START NEW GAME", "COLORS", "TWO PLAYERS MODE", "INSTRUCTIONS", "EXIT"};
+    string menuOptionsNames[] = {"(1) - START NEW GAME", "(2) - CONTINUE GAME", "(6) - COLORS", "(7) - TWO PLAYERS MODE", "(8) - INSTRUCTIONS", "(9) - EXIT"};
     string toggleNames[] = { "OFF", "ON"};
     system("cls");
-    std::cout << "\n\n                                              Menu:\n\n";
-    for (int i = 0 + firstTime; i < 6; ++i) {
-        setColor(selectedOption == i ? 10 : 7); // 10 is green, 7 is default color
-        if (i == 2) {
-            std::cout << "                                          " << menuOptionsNames[i] <<": " << toggleNames[colorsOn] << "\n\n";
-        } else if (i == 3) {
-            std::cout << "                                          " << menuOptionsNames[i] << ": " << toggleNames[twoPlayers] << "\n\n";
-        }
-        else {
-            std::cout << "                                          " << menuOptionsNames[i] << "\n\n";
-        }  
+    menuTitle();
+
+    for (int i = 0; i < 6; ++i) {
+            setColor(selectedOption == i ? 10 : 7); // 10 is green, 7 is default color
+            if (i == 2) {
+                std::cout << "                             " << menuOptionsNames[i] << ": " << toggleNames[colorsOn] << "\n\n";
+            }
+            else if (i == 3) {
+                std::cout << "                             " << menuOptionsNames[i] << ": " << toggleNames[twoPlayers] << "\n\n";
+            }
+            else if (i == 1 && firstTime) {
+            }
+            else {
+                std::cout << "                             " << menuOptionsNames[i] << "\n\n";
+            }
     }
     setColor(7); // Reset to default color
 }
 
-bool menuControl(bool& twoPlayerMode, bool& colorsMode, bool firstTime) {
-    setColor(0);
+bool menuControl(bool& twoPlayerMode, bool& colorsMode, bool& exit, bool firstTime) {
     char choice;
     int selectedOption = 0;
+    menuTitle();
+    setColor(0);
 
     do {
         displayMenu(selectedOption, colorsMode, twoPlayerMode, firstTime);
-        std::cout << "\n\n Use W, S and ENTER to navigate ";
+        std::cout << "\n\n Use W, S and ENTER to navigate or press the corresponding numbers";
         choice = _getch();
 
         switch (choice) {
         case (int)menuKeys::UP:
-            selectedOption == 0 + firstTime ? selectedOption = 5 : selectedOption--;
+            if (firstTime && selectedOption == 2)
+                selectedOption = 0;
+            else
+                selectedOption == 0 ? selectedOption = 5 : selectedOption--;
             break;
         case (int)menuKeys::DOWN:
-            selectedOption == 5 ? selectedOption = 0 + firstTime : selectedOption++;
+            if (firstTime && selectedOption == 0)
+                selectedOption = 2;
+            else
+              selectedOption == 5 ? selectedOption = 0 : selectedOption++;
             break;
         case (int)menuKeys::ESC:
             selectedOption = 5;
@@ -123,35 +131,65 @@ bool menuControl(bool& twoPlayerMode, bool& colorsMode, bool firstTime) {
         case(int)menuKeys::ENTER:
             if (selectedOption == 2) {
                 colorsMode = !colorsMode;
-                getColor('@');
+                getColor(COLOR_MOD);
             } else if (selectedOption == 3) {
                 twoPlayerMode = !twoPlayerMode;
             } else if (selectedOption == 4) {
                 showInstructions();
             }
             break;
+        case '1':
+            selectedOption = 0;
+            choice = (int)menuKeys::ENTER;
+            break;
+        case '2':
+            if (!firstTime) {
+                selectedOption = 1;
+            }
+            choice = (int)menuKeys::ENTER;
+            break;
+        case '6':
+            selectedOption = 2;
+            colorsMode = !colorsMode;
+            getColor('@');
+            break;
+        case '7':
+            selectedOption = 3;
+            twoPlayerMode = !twoPlayerMode;
+            break;
+        case '8':
+            selectedOption = 4;
+            showInstructions();
+            break;
+        case '9':
+            selectedOption = 5;
+            exit = true;
+            choice = (int)menuKeys::ENTER;
+            break;
         default:
             break;
         }
 
-    } while (!(choice == 13 && selectedOption != 2 && selectedOption != 3 && selectedOption != 4));
+    } while (!((choice == (int)menuKeys::ENTER) && selectedOption != 2 && selectedOption != 3 && selectedOption != 4));
     if (selectedOption == 5) {
-        std::exit(0);
+        exit = true;
+        system("cls");
+        setColor(0x07);
+        return 0;
     }
-    std::cout << "You selected Option " << selectedOption << ".\n";
     system("cls");
-    return !selectedOption;
+    return selectedOption;
 }
 
 void showInstructions() {
     system("cls");
-    std::cout << "\n                             GAME INSTRUCTIONS:  " << std::endl << std::endl;
+    std::cout << "                              GAME INSTRUCTIONS:  " << std::endl << std::endl;
     std::cout << "         Arrange falling tetrominoes to create complete horizontal lines." << std::endl;
-    std::cout << "        Use your keys to move left, right, rotate the shapes or accelerate" << std::endl;
-    std::cout << "         the descent. When horzintal lines are complete they are cleared." << std::endl;
-    std::cout << "         Clear lines to score points. The game speeds up as you progress." << std::endl;
+    std::cout << "        Use your keys to move left, right, rotate the shapes or drop them." << std::endl;
+    std::cout << "             When you fill horzintal lines cleared and you score pooint." << std::endl;
+    std::cout << "                      The game speeds up as you progress." << std::endl;
     std::cout << "           Prevent the blocks from reaching the top to continue playing." << std::endl << std::endl;
-    std::cout << "                                     CONTROLS:" << std::endl << std::endl;
+    std::cout << "                                    CONTROLS:" << std::endl << std::endl;
     std::cout << "                              Player One:          |      Player Two:" << std::endl;
     std::cout << "       Left:                           A           |               J" << std::endl<< std::endl;
     std::cout << "       Right:                          D           |               L" << std::endl<< std::endl;
@@ -162,3 +200,14 @@ void showInstructions() {
     std::cout << "      press any key to return to menu ";
     char choice = _getch();
 };
+
+void menuTitle() {
+    setColor(getColor(COLOR_TEXT));
+    std::cout << "\n" << std::endl;
+    std::cout << "       ##########  ##########  ##########  ########    ######  ##########" << std::endl;
+    std::cout << "           ##      ##              ##      ##      ##    ##    ###       " << std::endl;
+    std::cout << "           ##      #######         ##      ########      ##    ##########" << std::endl;
+    std::cout << "           ##      ##              ##      ##      ##    ##            ##" << std::endl;
+    std::cout << "           ##      ##########      ##      ##      ##  ######  ##########\n\n" << std::endl;
+    setColor(getColor(' '));
+}

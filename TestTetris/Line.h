@@ -1,4 +1,3 @@
-#pragma once
 #ifndef TETRIS_LINE_H
 #define TETRIS_LINE_H
 

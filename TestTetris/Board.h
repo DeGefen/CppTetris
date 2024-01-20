@@ -1,17 +1,10 @@
-#pragma once
-//
-// Created by Eylon Serok on 07/01/2024.
-//
+#ifndef TETRIS_BOARD_H
+#define TETRIS_BOARD_H
 
 #include "ListNode.h"
 #include "Point.h"
 #include <Windows.h>
 #include "general.h"
-
-#ifndef TETRIS_Board_H
-#define TETRIS_Board_H
-
-#endif //TETRIS_Board_H
 
 class Board {
 public:
@@ -50,3 +43,5 @@ private:
 
 
 };
+
+#endif

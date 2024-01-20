@@ -1,5 +1,3 @@
-
-#include "ListNode.h"
 #include "Board.h"
 
 void Board::addToHead(ListNode* node) {
@@ -101,7 +99,7 @@ void Board::updateScore(int i) {
 void Board::drawScore(int minx, int miny)
 {
     {
-        int backcolor = getColor('g');
+        int backcolor = getColor(COLOR_INFO);
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
         gotoxy(minx, miny);
 
