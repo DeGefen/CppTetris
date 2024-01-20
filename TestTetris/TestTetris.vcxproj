@@ -24,6 +24,7 @@
     <ProjectGuid>{820b8c97-9b0f-4fef-8536-ab3fc492ffed}</ProjectGuid>
     <RootNamespace>TestTetris</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Tetris</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
