@@ -26,6 +26,7 @@ public:
     int count() const;
     void draw(int from = 0);
     void erase();
+    void blowBomb(int coordX, int coordY);
 
 private:
     ListNode* head = nullptr;
