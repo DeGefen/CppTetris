@@ -8,12 +8,14 @@ using namespace std;
 
 
 class Point {
-	int x;
-	int y;
 	bool isGame1;
 
 
 public:
+
+	int x;
+	int y;
+
 	Point(bool game = true) { isGame1 = game; }
 
 	static constexpr int MIN_Y = 3;

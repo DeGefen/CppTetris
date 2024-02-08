@@ -41,6 +41,8 @@ public:
     bool checkTetroMove(Board& board);
     int getBlockedSpaces(ListNode* node, Board& board);
     int getMinX();
+    Point getHeadCoords();
+    char getType();
 
 
     short position = 0;

@@ -291,3 +291,13 @@ int Tetromino::getMinX() {
     for (int i = 0; i < NUM_OF_CORDS; ++i) if (cordX[index + i] > minX) minX = cordX[index + i];
     return minX;
 }
+
+Point Tetromino::getHeadCoords() {
+    Point p;
+    p.init(headX, headY);
+    return p;
+}
+
+char Tetromino::getType() {
+    return type;
+}

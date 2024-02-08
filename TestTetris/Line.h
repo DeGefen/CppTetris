@@ -20,6 +20,7 @@ public:
     void setNewLine();
     void printLine();
     bool canIntersectLines(Line* line2, bool makeChange = true);
+    void bombLine(int fromX, int toX);
     //void bombLine(int fromX, int toX);
 };
 
