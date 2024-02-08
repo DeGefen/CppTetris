@@ -18,6 +18,8 @@ public:
 
     unsigned int score = 0;
 
+    ListNode* getTail() const;
+    ListNode* getHead() const;
     void updateScore(int i);
     void addToHead(ListNode* node);
     void addToTail(ListNode* node);
@@ -26,7 +28,8 @@ public:
     int count() const;
     void draw(int from = 0);
     void erase();
-    void blowBomb(int coordX, int coordY);
+  
+  void blowBomb(int coordX, int coordY);
 
 private:
     ListNode* head = nullptr;

@@ -24,6 +24,7 @@
     <ProjectGuid>{820b8c97-9b0f-4fef-8536-ab3fc492ffed}</ProjectGuid>
     <RootNamespace>TestTetris</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Tetris</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -132,12 +133,15 @@
     <ClCompile Include="GameMech.cpp" />
     <ClCompile Include="GamesManagement.cpp" />
     <ClCompile Include="general.cpp" />
+    <ClCompile Include="GoodPostion.cpp" />
+    <ClCompile Include="GoodPositionNode.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="ListNode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Runner.cpp" />
+    <ClCompile Include="Tetrobot.cpp" />
     <ClCompile Include="Tetromino.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,11 +150,14 @@
     <ClInclude Include="GameMech.h" />
     <ClInclude Include="GamesManagement.h" />
     <ClInclude Include="general.h" />
+    <ClInclude Include="GoodPosition.h" />
+    <ClInclude Include="GoodPositionNode.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="ListNode.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Runner.h" />
+    <ClInclude Include="Tetrobot.h" />
     <ClInclude Include="Tetromino.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
