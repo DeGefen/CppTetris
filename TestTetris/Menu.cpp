@@ -1,6 +1,6 @@
 #include "Menu.h"
 
-void louding_screen() {
+void loading_screen() {
     srand(time(0));
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
 	gotoxy(0, 4);

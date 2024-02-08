@@ -25,6 +25,20 @@ void Board::removeFromTail() {
     tail->next = nullptr;
     nodesCount--;
 }
+
+void Board::blowBomb(int coordX, int coordY) {
+    int deleteFromY = coordY - 4 < 0 ? 0 : coordY - 4;
+    int deleteToY = coordY + 4 > nodesCount ? nodesCount : coordY + 4;
+    int deleteFromX = coordX -4 < 0 ? 0 : coordX - 4;
+    int deleteToX = coordX + 4 > GAME_WIDTH ? GAME_WIDTH : coordX + 4;
+    ListNode* deleteFromLineNode;
+    for (int i = deleteFromY; i < deleteToY; i++) {
+        deleteFromLineNode = getNodeFromIndex(deleteFromY);
+        for (int j = deleteFromX; j < deleteToX; j++)
+            deleteFromLineNode->line->arr[j] = SPACE;
+    }
+}
+
 void Board::removeFromHead() {
     if (head == tail) {
         head->deleteNode();

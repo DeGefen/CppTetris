@@ -32,3 +32,7 @@ bool Line::canIntersectLines(Line* line2, bool makeChange) {
     }
     return true;
 }
+
+void Line::bombLine(int fromX, int toX) {
+
+}

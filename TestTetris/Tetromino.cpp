@@ -36,7 +36,7 @@ void Tetromino::rotate(Board& board, short direction, bool change) { // Rotate c
 
 bool Tetromino::checkTetroMove(Board& board) { // return false if cant place
     bool flag = true;
-    for (int i = 0; i < NUM_OF_CORDS; ++i) {
+    for (int i = 0; i < (type == 'B' ? 1 : NUM_OF_CORDS); ++i) {
         int n = NUM_OF_CORDS * position + i;
         if (headX + cordX[n] < 0 || headX + cordX[n] > GAME_WIDTH-1 || headY + cordY[n] >= GAME_HEIGHT )
             return false;
@@ -44,7 +44,7 @@ bool Tetromino::checkTetroMove(Board& board) { // return false if cant place
 
     if (board.count() > 0) {
         int y = NULL_VALUE;
-        for (int i = 0; i < NUM_OF_CORDS; ++i) {
+        for (int i = 0; i < (type == 'B' ? 1 : NUM_OF_CORDS); ++i) {
             int n = NUM_OF_CORDS * position + i;
             if (flag && headY + cordY[n] != y && headY + cordY[n] >= GAME_HEIGHT - board.count()) {
                 y = headY + cordY[n];
@@ -67,7 +67,7 @@ bool Tetromino::checkTetroMoveAUX(Board& board, int y) {
 Line* Tetromino::convertToLine(int y) {
     Line* tetroLine = new Line;
     tetroLine->setNewLine();
-    for (int i = 0; i < NUM_OF_CORDS; ++i) {
+    for (int i = 0; i < (type == 'B' ? 1 : NUM_OF_CORDS); ++i) {
         int n = NUM_OF_CORDS * position + i;
         if (headY + cordY[n] == y) {
             tetroLine->arr[headX + cordX[n]] = type;
@@ -99,12 +99,14 @@ bool Tetromino::move(Board& board, bool change) { // returns true if moved tetro
         ListNode* filledLines[4] = {nullptr,nullptr,nullptr,nullptr};
         int y = NULL_VALUE;
         int score = 0;
-        for (int i = 0; i < NUM_OF_CORDS; ++i) {
+        for (int i = 0; i < (type == 'B' ? 1 : NUM_OF_CORDS); ++i) {
             int n = NUM_OF_CORDS * position + i;
             if (headY + cordY[n] != y) {
                 y = headY + cordY[n];
                 Line* tetroLine = convertToLine(y);
                 ListNode* temp = placeTetro(board, tetroLine, y);
+                if (type == 'B')
+                    board.blowBomb(headX, headY);
                 if(temp!=nullptr) filledLines[score++] = temp;
             }
 
@@ -147,8 +149,9 @@ void Tetromino::dropDown(Board& board) {
 
 
 void Tetromino::draw() {
-    for (int i = 0; i < NUM_OF_CORDS; ++i) {
-        int n = NUM_OF_CORDS * position + i;
+
+    for (int i = 0; i < (type == 'B' ? 1 : NUM_OF_CORDS); ++i) {
+        int n = NUM_OF_CORDS * position + i; 
         if (headY + cordY[n] >= 0) {
             p.init(headX + cordX[n], headY + cordY[n]);
             p.draw(type);
@@ -157,7 +160,7 @@ void Tetromino::draw() {
 };
 
 void Tetromino::erase() {
-    for (int i = 0; i < NUM_OF_CORDS; ++i) {
+    for (int i = 0; i < (type == 'B' ? 1 : NUM_OF_CORDS); ++i) {
         int n = NUM_OF_CORDS * position + i;
         if (headY + cordY[n] >= 0) {
             p.init(headX + cordX[n], headY + cordY[n]);
@@ -210,6 +213,12 @@ void Tetromino::setTetro(int num) {
         cordY = {1, 1, 0, 0,    1, 0, 0, -1 };
         numOfPositions = 2;
         type = 'Z';
+        break;
+    case 7: // tetro B
+        cordX = { 0 };
+        cordY = { 0 };
+        type = 'B';
+        numOfPositions = 1;
         break;
     }
     p = Point(game);

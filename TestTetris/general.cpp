@@ -41,6 +41,9 @@ int getColor(char c) {
 	case 'Z':
 		color = 0x44;
 		break;
+	case 'B':
+		color = 0xff;
+		break;
 	case COLOR_BORDER:
 		color = 0x88;
 		break;

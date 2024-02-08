@@ -9,7 +9,7 @@
 enum class menuKeys { UP = 'w', DOWN = 's', ENTER = 13, ESC = 27 };
 enum class menuOptions { START, CONTINUE, COLORS, TWO_PLAYERS_MODE, INSTRUCTIONS, EXIT};
 
-void louding_screen();
+void loading_screen();
 void drawMenu(bool newGame = true);
 void displayMenu(int selectedOption, bool colorsOn = true, bool twoPlayers = true,  bool firstTime = false);
 bool menuControl(bool& twoPlayerMode, bool& colorsMode, bool& exit, bool firstTime = false); // Return true if player selects continue, otherwise start new game
