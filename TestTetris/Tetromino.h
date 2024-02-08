@@ -25,33 +25,38 @@ public:
             cordX = tetro.cordX;
             cordY = tetro.cordY;
             type = tetro.type;
-            position = 0;
+            position = tetro.position;
             numOfPositions = tetro.numOfPositions;
         }
         return *this;
     }
     void jumpTo(int x, int y);
-    void rotate(Board& board, short direction);
-    void sideMove(Board& board, short direction);
+    void rotate(Board& board, short direction, bool change = true);
+    void sideMove(Board& board, short direction, bool change = true);
     void dropDown(Board& board);
-    bool move(Board& board);
+    bool move(Board& board, bool drawMod = true);
     void draw();
     void erase();
+    int getCoverage(int& heady);
+    bool checkTetroMove(Board& board);
+    int getBlockedSpaces(ListNode* node, Board& board);
+    int getMinX();
+
+
+    short position = 0;
+    short numOfPositions;
 
 private:
     int headX;
-    int headY;
+    int headY;    
     vector<int> cordX;
     vector<int> cordY;
     char type;
-    short position = 0;
-    short numOfPositions;
     Point p;
     bool game;
 
     void setTetro(int num);
     Line* convertToLine(int y);
-    bool checkTetroMove(Board& board);
     bool checkTetroMoveAUX(Board& board, int y);
     ListNode* placeTetro(Board& board, Line* tetroLine, int y);
 };

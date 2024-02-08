@@ -122,3 +122,11 @@ void Board::eraseLine(int y) {
     p.draw(' ');
     cout << "           ";
 }
+
+ListNode* Board::getTail() const {
+    return tail;
+}
+
+ListNode* Board::getHead() const {
+    return head;
+}
