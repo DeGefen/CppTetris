@@ -133,6 +133,8 @@
     <ClCompile Include="GameMech.cpp" />
     <ClCompile Include="GamesManagement.cpp" />
     <ClCompile Include="general.cpp" />
+    <ClCompile Include="GoodPostion.cpp" />
+    <ClCompile Include="GoodPositionNode.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="ListNode.cpp" />
     <ClCompile Include="main.cpp" />
@@ -148,6 +150,8 @@
     <ClInclude Include="GameMech.h" />
     <ClInclude Include="GamesManagement.h" />
     <ClInclude Include="general.h" />
+    <ClInclude Include="GoodPosition.h" />
+    <ClInclude Include="GoodPositionNode.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="ListNode.h" />
     <ClInclude Include="Menu.h" />

@@ -1,25 +1,25 @@
 #include "Tetromino.h"
 
 
-void Tetromino::rotate(Board& board, short direction) { // Rotate clockwise (direction = -1), counter-clockwise (direction = 1)
+void Tetromino::rotate(Board& board, short direction, bool change) { // Rotate clockwise (direction = -1), counter-clockwise (direction = 1)
     short checkList[12] = { -1,0,2,0,-1,-1,-1,0,2,0,-1,-1 };
     if (numOfPositions == 1)
         return;
-    erase();
+    if (change) erase();
     position += direction;
     if (position < 0)
         position = numOfPositions - 1;
     if (position >= numOfPositions)
         position = 0;
-    if (checkTetroMove(board)) {
-        draw();
+    if (!change || checkTetroMove(board)) {
+        if (change) draw();
         return;
     }
     for (int i = 0; i < 12; i += 2) {
         headX += checkList[i];
         headY += checkList[i + 1];
         if (checkTetroMove(board)) {
-            draw();
+            if (change) draw();
             return;
         }
     }
@@ -31,10 +31,10 @@ void Tetromino::rotate(Board& board, short direction) { // Rotate clockwise (dir
         position = numOfPositions - 1;
     if (position >= numOfPositions)
         position = 0;
-    draw();
+    if (change) draw();
 }
 
-bool Tetromino::checkTetroMove(Board& board) {
+bool Tetromino::checkTetroMove(Board& board) { // return false if cant place
     bool flag = true;
     for (int i = 0; i < NUM_OF_CORDS; ++i) {
         int n = NUM_OF_CORDS * position + i;
@@ -83,16 +83,16 @@ void Tetromino::jumpTo(int x, int y) {
     headY = y;
 }
 
-void Tetromino::sideMove(Board& board, short direction) {
-    erase();
+void Tetromino::sideMove(Board& board, short direction, bool change) {
+    if (change) erase();
     headX += direction;
     if (!checkTetroMove(board))
         headX += direction * (-1);
-    draw();
+    if (change) draw();
 }
 
-bool Tetromino::move(Board& board) { // returns true if moved tetro down, false if placed into line
-    erase();
+bool Tetromino::move(Board& board, bool change) { // returns true if moved tetro down, false if placed into line
+    if (change) erase();
     ++headY;
     if (!checkTetroMove(board)) {
         --headY;
@@ -109,17 +109,17 @@ bool Tetromino::move(Board& board) { // returns true if moved tetro down, false 
             }
 
         }
-        if (score > 0) {
+        if (change && score > 0) {
             board.updateScore(score);
             board.remove(filledLines);
             board.erase();
             board.draw();
         }
-        erase();
+        if (change) erase();
         return false;
     }
     else {
-        draw();
+        if (change) draw();
         return true;
     }
 }
@@ -213,4 +213,72 @@ void Tetromino::setTetro(int num) {
         break;
     }
     p = Point(game);
+}
+
+int Tetromino::getCoverage(int& headY) {
+    int maxY = 0;
+    int count;
+    for (int i = 0; i < NUM_OF_CORDS; ++i) {
+        int n = NUM_OF_CORDS * position + i;
+        if (cordY[n] == maxY) {
+            count++;
+        }
+        else if (cordY[n] > maxY) {
+            maxY = cordY[n];
+            count = 1;
+        }
+    }
+    headY = maxY * (-1);
+    return count;
+}
+
+int Tetromino::getBlockedSpaces(ListNode* node, Board& board) {
+    int cordIndex = NUM_OF_CORDS * position;
+    int currY = cordY[cordIndex];
+    int count = 0;
+    bool foundCord;
+    int index = 0;
+
+    if (node != nullptr){
+        if (node == board.getTail()) {
+            for (; index < NUM_OF_CORDS && cordY[cordIndex + index] == currY; ++index);
+            currY = cordY[cordIndex + index];
+        }
+        else node = node->prev;
+
+        for (; index < NUM_OF_CORDS && node!=nullptr; ++index, foundCord=false) {
+            if (currY != cordY[cordIndex + index]) {
+                node = node->prev;
+                currY = cordY[cordIndex + index];
+            }
+            for (int j = index - 1; j >= 0; --j) {
+                if (cordY[cordIndex + index] != cordY[cordIndex] && cordX[cordIndex + index] == cordX[cordIndex + j]) foundCord = true;
+            }
+            if (!foundCord && node->line->arr[headX + cordX[cordIndex + index]] == SPACE) ++count;
+        }
+    }
+
+    if (index == 0) {
+        if (board.count() != 0) {
+            node = board.getHead();
+            for (; index < NUM_OF_CORDS && cordY[cordIndex + index] == cordY[cordIndex]; ++index) {
+                if (node->line->arr[headX + cordX[cordIndex + index]] == SPACE) ++count;
+            }
+        }
+        else ++index;
+    }
+    for (; index < NUM_OF_CORDS; ++index, foundCord = false) {
+        for (int j = index - 1; j >= 0; --j) {
+            if (cordY[cordIndex + index] != cordY[cordIndex] && cordX[cordIndex + index] == cordX[cordIndex + j]) foundCord = true;
+        }
+        if (!foundCord) ++count;
+    }
+    return count;
+}
+
+int Tetromino::getMinX() {
+    int minX = 0;
+    int index = NUM_OF_CORDS * position;
+    for (int i = 0; i < NUM_OF_CORDS; ++i) if (cordX[index + i] > minX) minX = cordX[index + i];
+    return minX;
 }
