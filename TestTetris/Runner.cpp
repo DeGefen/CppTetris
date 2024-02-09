@@ -2,15 +2,15 @@
 
 void Runner::start() {
     //loading_screen();
-    bool twolayerMode = true, colorsMode = true, exit = false, continueGame;
-    continueGame = menuControl(twolayerMode, colorsMode, exit ,true);
+    bool twolayerMode = true, colorsMode = true, exit = false, bot = false, twoBots = false, continueGame;
+    continueGame = menuControl(colorsMode, exit ,bot, twoBots, true);
     if (exit) return;
     while (true) {
         if (continueGame && !exit)
-            menuControl(twolayerMode, colorsMode, exit, true);
+            menuControl(colorsMode, exit, bot, twoBots, true);
         if (exit) return;
         GamesManagement gamesManage(twolayerMode);
         gamesManage.drawBorders();
-        gamesManage.runGames(continueGame, twolayerMode, colorsMode , exit);
+        gamesManage.runGames(continueGame, bot, twoBots, colorsMode , exit);
     }
 }

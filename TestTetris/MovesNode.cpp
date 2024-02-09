@@ -2,7 +2,7 @@
 
 void MovesNode::setNewNode() {
     next = nullptr; prev = nullptr;
-    move = movesEnums::DOWN;
+    move = moves::DOWN;
 }
 void MovesNode::deleteNode() {
     delete this;

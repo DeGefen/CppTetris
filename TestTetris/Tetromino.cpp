@@ -226,7 +226,7 @@ void Tetromino::setTetro(int num) {
 
 int Tetromino::getCoverage(int& headY) {
     int maxY = 0;
-    int count;
+    int count = 0;
     for (int i = 0; i < NUM_OF_CORDS; ++i) {
         int n = NUM_OF_CORDS * position + i;
         if (cordY[n] == maxY) {
@@ -245,7 +245,7 @@ int Tetromino::getBlockedSpaces(ListNode* node, Board& board) {
     int cordIndex = NUM_OF_CORDS * position;
     int currY = cordY[cordIndex];
     int count = 0;
-    bool foundCord;
+    bool foundCord=false;
     int index = 0;
 
     if (node != nullptr){
@@ -292,11 +292,14 @@ int Tetromino::getMinX() {
     return minX;
 }
 
-Point Tetromino::getHeadCoords() {
-    Point p;
-    p.init(headX, headY);
-    return p;
+int Tetromino::getHeadX(){
+    return headX;
 }
+
+int Tetromino::getHeadY(){
+    return headY;
+}
+
 
 char Tetromino::getType() {
     return type;

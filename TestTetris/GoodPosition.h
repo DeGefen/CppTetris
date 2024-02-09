@@ -10,11 +10,14 @@ class GoodPosition {
 	int nodesCount;
 
 
+	void findGoodPositions(GameMech& game);
+	
 	void addNode(int coverage, int headX, int headY, int position, int blockedSpaces, int bottomY);
 	void findPlacement(GameMech& game); //WIP
-	void findGoodPositions(GameMech& game);
 	void addToHead(GoodPositionNode* node);
 	void addToTail(GoodPositionNode* node);
+public:
+	GoodPosition(GameMech& game) { findGoodPositions(game);}
 	GoodPositionNode* getGoodPosition(bool randPosition = false);
 };
 

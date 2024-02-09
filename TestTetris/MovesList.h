@@ -13,8 +13,10 @@ public:
 
     MovesNode* getTail() const;
     MovesNode* getHead() const;
+    moves popHead();
     void addToHead(MovesNode* node);
     void addToTail(MovesNode* node);
+    void addMove(moves move);
     void remove(MovesNode** node);
 
 

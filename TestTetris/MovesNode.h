@@ -1,6 +1,6 @@
 #pragma once
 
-enum class movesEnums {DOWN, LEFT, RIGHT, ROTATE_CLOCKWISE, ROTATE_COUNTERCLOCKWISE};
+enum class moves {LEFT, RIGHT, DOWN, ROTATE_CLOCKWISE, ROTATE_COUNTERCLOCKWISE};
 
 class MovesNode {
 	void setNewNode();
@@ -12,7 +12,7 @@ public:
     void deleteNode();
 
 
-    movesEnums move;
+    moves move;
     MovesNode* next = nullptr;
     MovesNode* prev = nullptr;
 };

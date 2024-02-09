@@ -5,9 +5,9 @@
 #include "MovesList.h"
 
 class TetroBot {
-	MovesList getMovesList(Board* board, GoodPositionNode* goodPos, Tetromino* tet);
-	Line createLineFromPos(GoodPositionNode* pos, int movesLeft=0);
 	Tetromino getTetFromPos(GoodPositionNode* pos, Tetromino* tetro);
+public:
+	MovesList getMovesList(Board& board, GoodPositionNode* goodPos, Tetromino* tet);
 };
 
 
