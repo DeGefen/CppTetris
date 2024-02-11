@@ -47,7 +47,9 @@ void GamesManagement::FlashBoarder() {
 
 }
 
-void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& colorsMode, bool& exit) {
+void GamesManagement::runGames(bool& continueGame, bool& bot, bool& twoBots, bool& colorsMode, bool& exit) {
+    bool twoPlayerMode = true; //Change
+
     dropped1 = dropped2 = false;
     game1_alive = game2_alive = true;
     game1.next.jumpTo(GameMech::NEXT_X,GameMech::NEXT_Y);
@@ -64,7 +66,7 @@ void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& co
         if (_kbhit()) {
             keyPressed = _getch();
             if (keyPressed == (int)eKeys1::ESC) {
-                continueGame = menuControl(twoPlayerMode, colorsMode, exit);
+                continueGame = menuControl(continueGame, bot, twoBots, colorsMode, exit);
                 if (exit) return;
                 if (continueGame) {
                     game1.curr.draw();
@@ -82,7 +84,11 @@ void GamesManagement::runGames(bool& continueGame, bool& twoPlayerMode, bool& co
                 else
                     return;
             }
-            movment(keyPressed);
+            if (bot) movment(getBotMove(true));
+            if(twoBots)
+                movment(getBotMove(false));
+            else
+              movment(keyPressed);
         }
         clock.addMiliSeconds(50);
         if (++counter == threshHold) {
@@ -160,6 +166,30 @@ void GamesManagement::movment(int key) {
         }
     }
 }
+
+int GamesManagement::getBotMove(bool isGame2) {
+    GoodPosition goodPositions = GoodPosition(isGame2 ? game2 : game1);
+    TetroBot tetroBot;
+    MovesList movesList = tetroBot.getMovesList(isGame2 ? game2.board : game1.board,
+        goodPositions.getGoodPosition(), &(isGame2 ? game2.curr : game1.curr)); //TODO: add bot level
+    moves move = movesList.popHead();
+    (int)eKeys1::LEFT;
+    int keyMove = 0;
+    switch (move) {
+    case moves::RIGHT:
+        keyMove = isGame2 ? (int)eKeys2::RIGHT : (int)eKeys1::RIGHT;
+        break;
+    case moves::ROTATE_COUNTERCLOCKWISE:
+        keyMove = isGame2 ? (int)eKeys2::ROTATE_COUNTERCLOCKWISE : (int)eKeys1::ROTATE_COUNTERCLOCKWISE;
+        break;
+    case moves::DOWN:
+        break;
+    default:
+        break;
+    }
+    return keyMove;
+}
+
 
 void GamesManagement::lunch(bool isTwoGames) {
     srand(time(0));

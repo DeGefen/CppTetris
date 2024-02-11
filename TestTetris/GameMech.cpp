@@ -4,7 +4,9 @@ bool GameMech::run(bool isDropped) { //return false if player lost
 	if (isDropped || !curr.move(board)) {
 		next.erase();
 		curr = next;
-		next = Tetromino(rand() % 7, game);
+		bool isBomb = !(rand() % 20);
+		int nextTetType = isBomb ? 7 : rand() % 7;
+		next = Tetromino(nextTetType, game);
 		curr.jumpTo(STARTING_X, STARTING_Y);
 		curr.draw();
 		next.jumpTo(NEXT_X, NEXT_Y);

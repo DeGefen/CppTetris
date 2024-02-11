@@ -61,7 +61,9 @@ void GoodPosition::addToTail(GoodPositionNode* node) {
 
 void GoodPosition::addNode(int coverage, int headX, int headY, int position, int blockedSpaces, int bottomY) {
     GoodPositionNode* node = new GoodPositionNode(coverage, headX, headY, position, blockedSpaces, bottomY);
-    if (node->betterThen(head)) addToHead(node);
+    if (head==nullptr)
+        addToHead(node);
+    else if (node->betterThen(head)) addToHead(node);
     else addToTail(node);
     ++nodesCount;
 }

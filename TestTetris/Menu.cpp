@@ -1,6 +1,6 @@
 #include "Menu.h"
 
-void louding_screen() {
+void loading_screen() {
     srand(time(0));
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x02);
 	gotoxy(0, 4);
@@ -78,63 +78,63 @@ void setColor(int colorCode) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colorCode);
 }
 
-void displayMenu(int selectedOption, bool colorsOn, bool twoPlayers, bool firstTime) {
-    string menuOptionsNames[] = {"(1) - START NEW GAME", "(2) - CONTINUE GAME", "(6) - COLORS", "(7) - TWO PLAYERS MODE", "(8) - INSTRUCTIONS", "(9) - EXIT"};
+void displayMenu(int selectedOption, bool colorsOn, bool bot, bool twoBots, bool firstTime) {
+    string menuOptionsNames[] = {"(1) Start a new game - Human vs Human", "(2) Start a new game - Human vs Computer", "(3) Start a new game - Computer vs Computer", "(4) Continue a paused game", "(6) - COLORS", "(8) - INSTRUCTIONS", "(9) - EXIT"};
     string toggleNames[] = { "OFF", "ON"};
     system("cls");
     menuTitle();
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 7; ++i) {
             setColor(selectedOption == i ? 10 : 7); // 10 is green, 7 is default color
-            if (i == 2) {
-                std::cout << "                             " << menuOptionsNames[i] << ": " << toggleNames[colorsOn] << "\n\n";
-            }
-            else if (i == 3) {
-                std::cout << "                             " << menuOptionsNames[i] << ": " << toggleNames[twoPlayers] << "\n\n";
-            }
-            else if (i == 1 && firstTime) {
-            }
-            else {
-                std::cout << "                             " << menuOptionsNames[i] << "\n\n";
+            if (i == 4) {
+                std::cout << "                    " << menuOptionsNames[i] << ": " << toggleNames[colorsOn] << "\n\n";
+            }                                    
+            else if (i == 3 && firstTime) {       
+            }                                    
+            else {                               
+                std::cout << "                    " << menuOptionsNames[i] << "\n\n";
             }
     }
     setColor(7); // Reset to default color
 }
 
-bool menuControl(bool& twoPlayerMode, bool& colorsMode, bool& exit, bool firstTime) {
+bool menuControl(bool& colorsMode, bool& exit, bool& bot, bool& twoBots, bool firstTime) {
     char choice;
     int selectedOption = 0;
     menuTitle();
     setColor(0);
 
     do {
-        displayMenu(selectedOption, colorsMode, twoPlayerMode, firstTime);
-        std::cout << "\n\n Use W, S and ENTER to navigate or press the corresponding numbers";
+        displayMenu(selectedOption, colorsMode, bot, twoBots, firstTime);
+        std::cout << "\n Use W, S and ENTER to navigate or press the corresponding numbers";
         choice = _getch();
 
         switch (choice) {
         case (int)menuKeys::UP:
-            if (firstTime && selectedOption == 2)
-                selectedOption = 0;
-            else
-                selectedOption == 0 ? selectedOption = 5 : selectedOption--;
-            break;
-        case (int)menuKeys::DOWN:
-            if (firstTime && selectedOption == 0)
+            if (firstTime && selectedOption == 4)
                 selectedOption = 2;
             else
-              selectedOption == 5 ? selectedOption = 0 : selectedOption++;
+                selectedOption == 0 ? selectedOption = 6 : selectedOption--;
+            break;
+        case (int)menuKeys::DOWN:
+            if (firstTime && selectedOption == 2)
+                selectedOption = 4;
+            else
+              selectedOption == 6 ? selectedOption = 0 : selectedOption++;
             break;
         case (int)menuKeys::ESC:
-            selectedOption = 5;
+            selectedOption = 6;
             break;
         case(int)menuKeys::ENTER:
-            if (selectedOption == 2) {
+            if (selectedOption == 4) {
                 colorsMode = !colorsMode;
                 getColor(COLOR_MOD);
-            } else if (selectedOption == 3) {
-                twoPlayerMode = !twoPlayerMode;
-            } else if (selectedOption == 4) {
+            } else if (selectedOption == 1) {
+                bot = true;
+            } else if (selectedOption == 2) {
+                twoBots = true;
+            }
+            else if (selectedOption == 4) {
                 showInstructions();
             }
             break;
@@ -143,8 +143,16 @@ bool menuControl(bool& twoPlayerMode, bool& colorsMode, bool& exit, bool firstTi
             choice = (int)menuKeys::ENTER;
             break;
         case '2':
+            selectedOption = 1;
+            choice = (int)menuKeys::ENTER;
+            break;
+        case '3':
+            selectedOption = 2;
+            choice = (int)menuKeys::ENTER;
+            break;
+        case '4':
             if (!firstTime) {
-                selectedOption = 1;
+                selectedOption = 3;
             }
             choice = (int)menuKeys::ENTER;
             break;
@@ -153,16 +161,12 @@ bool menuControl(bool& twoPlayerMode, bool& colorsMode, bool& exit, bool firstTi
             colorsMode = !colorsMode;
             getColor('@');
             break;
-        case '7':
-            selectedOption = 3;
-            twoPlayerMode = !twoPlayerMode;
-            break;
         case '8':
-            selectedOption = 4;
+            selectedOption = 5;
             showInstructions();
             break;
         case '9':
-            selectedOption = 5;
+            selectedOption = 6;
             exit = true;
             choice = (int)menuKeys::ENTER;
             break;
@@ -170,15 +174,15 @@ bool menuControl(bool& twoPlayerMode, bool& colorsMode, bool& exit, bool firstTi
             break;
         }
 
-    } while (!((choice == (int)menuKeys::ENTER) && selectedOption != 2 && selectedOption != 3 && selectedOption != 4));
-    if (selectedOption == 5) {
+    } while (!((choice == (int)menuKeys::ENTER) && selectedOption != 4 && selectedOption != 5 && selectedOption != 6));
+    if (selectedOption == 6) {
         exit = true;
         system("cls");
         setColor(0x07);
         return 0;
     }
     system("cls");
-    return selectedOption;
+    return selectedOption == 4 ? true : false;
 }
 
 void showInstructions() {
