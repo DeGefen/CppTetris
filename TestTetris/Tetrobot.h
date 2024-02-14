@@ -3,11 +3,23 @@
 
 #include "GoodPosition.h"
 #include "MovesList.h"
+#include "general.h"
 
 class TetroBot {
-	Tetromino getTetFromPos(GoodPositionNode* pos, Tetromino* tetro);
+	MovesList movesList;
+	bool isGame1;
+	char level = 'a';
+	int moves_count = 0;
+	void setTetToPos(GoodPositionNode* pos, Tetromino &tetro);
+	bool getMovesList(GameMech& game, GoodPositionNode* goodPos);
 public:
-	MovesList getMovesList(Board& board, GoodPositionNode* goodPos, Tetromino* tet);
+	int nextMove(GameMech& game);
+	void setBot(bool isGame1, char level) {
+		this->isGame1 = isGame1;
+		this->level = level;
+		moves_count = 0;
+		movesList.empty();
+	}
 };
 
 

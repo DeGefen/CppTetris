@@ -1,7 +1,6 @@
-#include "Runner.h"
-using namespace std;
+#include "GamesManagement.h"
 
 int main() {
-	Runner games;
-	games.start();
+	GamesManagement tetris;
+	tetris.start();
 }

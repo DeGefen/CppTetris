@@ -26,19 +26,6 @@ void Board::removeFromTail() {
     nodesCount--;
 }
 
-void Board::blowBomb(int coordX, int coordY) {
-    int deleteFromY = coordY - 4 < 0 ? 0 : coordY - 4;
-    int deleteToY = coordY + 4 > nodesCount ? nodesCount : coordY + 4;
-    int deleteFromX = coordX -4 < 0 ? 0 : coordX - 4;
-    int deleteToX = coordX + 4 > GAME_WIDTH ? GAME_WIDTH : coordX + 4;
-    ListNode* deleteFromLineNode;
-    for (int i = deleteFromY; i < deleteToY; i++) {
-        deleteFromLineNode = getNodeFromIndex(deleteFromY);
-        for (int j = deleteFromX; j < deleteToX; j++)
-            deleteFromLineNode->line->arr[j] = SPACE;
-    }
-}
-
 void Board::removeFromHead() {
     if (head == tail) {
         head->deleteNode();
@@ -61,9 +48,9 @@ void Board::removeFromMiddle(ListNode* node) {
 
 ListNode* Board::getNodeFromIndex(int i) {
 
-    int y = GAME_HEIGHT - nodesCount;
+    int y = GameConfig::GAME_HEIGHT - nodesCount;
     ListNode* node = head;
-    while (y != i && node->next != nullptr) {
+    while (y != i && node!=nullptr && node->next != nullptr) {
         ++y;
         node = node->next;;
     }
@@ -75,16 +62,16 @@ int Board::count() const {
 }
 
 void Board::erase() {
-    for (int i = GAME_HEIGHT - 1; i >= 0; i--) eraseLine(i);
+    for (int i = GameConfig::GAME_HEIGHT - 1; i >= 0; i--) eraseLine(i);
 }
 
 void Board::draw(int from) { //draws board from the bottom, begin with "GAME_HEIGHT - from - 1"
     ListNode* node = tail;
-    for (int i = GAME_HEIGHT - from - 1; i >= 0 && node != nullptr; --i, node = node->prev) {
+    for (int i = GameConfig::GAME_HEIGHT - from - 1; i >= 0 && node != nullptr; --i, node = node->prev) {
         p.init(0, i);
-        for (int j = 0; j < GAME_WIDTH;++j) {
+        for (int j = 0; j < GameConfig::GAME_WIDTH;++j) {
                 p.init(j, i);
-                if (node->line->arr[j]!=SPACE)
+                if (node->line->arr[j]!= GameConfig::SPACE)
                     p.draw(node->line->arr[j]);
             }
         }
@@ -106,8 +93,8 @@ void Board::updateScore(int i) {
         break;
     default: {}
     }
-    if (isGame1) drawScore(Point::MIN_X1 + (5 + GAME_WIDTH), 13);
-    else  drawScore(Point::MIN_X2 + (5 + GAME_WIDTH), 13);
+    if (isGame1) drawScore(Point::MIN_X1 + (5 + GameConfig::GAME_WIDTH), 13);
+    else  drawScore(Point::MIN_X2 + (5 + GameConfig::GAME_WIDTH), 13);
 }
 
 void Board::drawScore(int minx, int miny)
@@ -121,20 +108,49 @@ void Board::drawScore(int minx, int miny)
     }
 }
 
-void Board::remove(ListNode** filledNodes) {
-    int i = 0;
-    while (filledNodes[i] != nullptr) {
-        if (filledNodes[i] == head) removeFromHead();
-        else if (filledNodes[i] == tail) removeFromTail();
-        else removeFromMiddle(filledNodes[i]);
-        i++;
+bool Board::checkFilled() {
+    int count = 0;
+    bool foundBomb = false;
+    int y = GameConfig::GAME_HEIGHT - nodesCount;
+    ListNode* node = head;
+    ListNode* next;
+    while (node != nullptr) {
+        next = node->next;
+        if (node->line->countFilled < GameConfig::GAME_WIDTH) {
+            foundBomb = blowBomb(node) || foundBomb;
+            eraseLine(y);
+        }
+        if (node->line->countFilled >= GameConfig::GAME_WIDTH || node->line->countFilled == 0) {
+            if (node->line->countFilled >= GameConfig::GAME_WIDTH) ++count;
+            remove(node);
+        }
+        y++;
+        node = next;
     }
+    if (count > 0) {
+        updateScore(count);
+    }
+    erase();
+    draw();
+    return foundBomb;
+}
+
+void Board::remove(ListNode* node) {
+    if (node == head) {
+        removeFromHead();
+        return;
+    }
+    if (node == tail) {
+        removeFromTail();
+        return;
+    }
+    removeFromMiddle(node);
 }
 
 void Board::eraseLine(int y) {
     p.init(0, y);
     p.draw(' ');
-    cout << "           ";
+    std::cout << "           ";
 }
 
 ListNode* Board::getTail() const {
@@ -143,4 +159,59 @@ ListNode* Board::getTail() const {
 
 ListNode* Board::getHead() const {
     return head;
+}
+
+int Board::matchCords(std::vector<int>& cords, bool empty_mode) {
+    int count = 0;
+    ListNode* node;
+    while (cords.size()>0) {
+        int cordY = cords.back();
+        cords.pop_back();
+        int cordX = cords.back();
+        cords.pop_back();
+        node = getNodeFromIndex(cordY);
+        if (empty_mode && cordY < GameConfig::GAME_HEIGHT && cordX >= 0 && cordX < GameConfig::GAME_WIDTH) {
+            if (node == nullptr) count++;
+            else if (node != nullptr && (node->line->arr[cordX] == GameConfig::SPACE || node->line->arr[cordX] == GameConfig::BOOM)) count++;
+        }
+        else if (!empty_mode && (cordX < 0 || cordX >= GameConfig::GAME_WIDTH)) count++;
+        else if (!empty_mode && node != nullptr && (node->line->arr[cordX] != GameConfig::SPACE && node->line->arr[cordX] != GameConfig::BOOM)) count++;
+    }
+    return count;
+}
+
+bool Board::blowBomb(ListNode* node) {
+    bool foundBomb = false;
+    for (int i = 0; i < GameConfig::GAME_WIDTH; i++) {
+        if (node->line->arr[i] == GameConfig::BOOM) {
+            node->line->arr[i] = GameConfig::SPACE;
+            node->line->countFilled--;
+        }
+        if (node->line->arr[i] == GameConfig::BAM) {
+            foundBomb = true;
+            node->line->arr[i] = GameConfig::BOOM;
+        }
+
+    }
+    return foundBomb;
+}
+
+int Board::getBoom(int x, int y) {
+    bool first_time = true;
+    int count = 0;
+    int j = 0;
+    int direcation = 1;
+    ListNode* node = nullptr;
+    for (int currY = y - GameConfig::BOMB_RADIUS; currY <= y + GameConfig::BOMB_RADIUS; currY++, j += direcation) {
+        if (currY==y) direcation = -1;
+        if (currY >= 0 && currY < GameConfig::GAME_HEIGHT) {
+            if (first_time && node==nullptr) node = getNodeFromIndex(currY);
+            for (int currX = (x - j) >= 0 ? (x - j) : 0; currX <= x + j && currX < GameConfig::GAME_WIDTH; currX++) {
+                if (node != nullptr && node->line->arr[currX] != GameConfig::SPACE && node->line->arr[currX] != GameConfig::BOOM) count++;
+            }
+            if (first_time && node == nullptr) return count;
+            node = node->next;
+        }
+    }
+    return count;
 }

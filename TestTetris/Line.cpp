@@ -2,37 +2,32 @@
 
 void Line::setNewLine() {
     countFilled = 0;
-    for (int i = 0; i < GAME_WIDTH; i++)
-        arr[i] = SPACE;
+    for (int i = 0; i < GameConfig::GAME_WIDTH; i++)
+        arr[i] = GameConfig::SPACE;
 }
 void Line::printLine() {
     std::cout << arr << '\n';
 }
 bool Line::canIntersectLines(Line* line2, bool makeChange) {
-    if (countFilled + line2->countFilled > GAME_WIDTH)
-        return false;
-    
-    string str = EMPTY_LINE;
+    char str[13] = "            ";
     int add=0;
 
-    for (int i = 0; i < GAME_WIDTH; ++i) {
-        if (arr[i] != SPACE && line2->arr[i] != SPACE)
+    for (int i = 0; i < GameConfig::GAME_WIDTH; ++i) {
+        if (arr[i] != GameConfig::SPACE && line2->arr[i] == GameConfig::BAM)
+            str[i] = line2->arr[i];
+        else if (arr[i] != GameConfig::BOOM && line2->arr[i] != GameConfig::BAM &&  arr[i] != GameConfig::SPACE && line2->arr[i] != GameConfig::SPACE)
             return false;
-        else if (makeChange && arr[i] != SPACE)
+        else if (makeChange && arr[i] != GameConfig::SPACE && line2->arr[i] == GameConfig::SPACE)
             str[i] = arr[i];
-        else if (makeChange && line2->arr[i] != SPACE) {
+        else if (makeChange && line2->arr[i] != GameConfig::SPACE) {
             str[i] = line2->arr[i];
             ++add;
         }
     }
 
     if (makeChange) {
-        arr = str;
+        for (int i = 0; i < 13; i++) arr[i] = str[i];
         countFilled += add;
     }
     return true;
-}
-
-void Line::bombLine(int fromX, int toX) {
-
 }

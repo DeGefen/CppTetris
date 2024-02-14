@@ -4,7 +4,6 @@
 #include <iostream>
 #include <Windows.h>
 #include "general.h"
-using namespace std;
 
 
 class Point {

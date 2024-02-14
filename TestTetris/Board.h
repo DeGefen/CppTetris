@@ -3,7 +3,6 @@
 
 #include "ListNode.h"
 #include "Point.h"
-#include <Windows.h>
 #include "general.h"
 
 class Board {
@@ -23,13 +22,15 @@ public:
     void updateScore(int i);
     void addToHead(ListNode* node);
     void addToTail(ListNode* node);
-    void remove(ListNode** node);
+    void remove(ListNode* node);
+    bool checkFilled();
     ListNode* getNodeFromIndex(int i);
     int count() const;
     void draw(int from = 0);
     void erase();
-  
-  void blowBomb(int coordX, int coordY);
+    int matchCords(std::vector<int>& cords, bool empty_mode = true);
+    bool blowBomb(ListNode* node);
+    int getBoom(int x, int y);
 
 private:
     ListNode* head = nullptr;
