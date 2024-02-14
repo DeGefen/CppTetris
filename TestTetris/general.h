@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <Windows.h>
-using namespace std;
+#include "GameConfig.h"
 
 constexpr auto COLOR_MOD = '@';
 constexpr auto COLOR_BORDER = 'G';

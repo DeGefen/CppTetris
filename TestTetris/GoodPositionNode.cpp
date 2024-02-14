@@ -1,8 +1,12 @@
 #include "GoodPositionNode.h"
 
 bool GoodPositionNode::betterThen(GoodPositionNode* node) { // if "this" is better then "node"
+
 	if (node->blockedSpaces < blockedSpaces) return false;
 	if (node->blockedSpaces > blockedSpaces) return true;
+
+	if (node->linesAdded < linesAdded) return false;
+	if (node->linesAdded > linesAdded) return true;
 
 	if (node->bottomY < bottomY) return true;
 	if (node->bottomY > bottomY) return false;
@@ -11,5 +15,13 @@ bool GoodPositionNode::betterThen(GoodPositionNode* node) { // if "this" is bett
 	if (node->coverage > coverage) return false;
 
 	if (node->headX > headX) return true;
+	if (node->headX < headX) return false;
+
+	if (node->linesFilled < linesFilled) return true;
+	if (node->linesFilled > linesFilled) return false;
+
+	if (node->neighbors < neighbors) return true;
+	if (node->neighbors > neighbors) return false;
+
 	return false;
 }

@@ -1,134 +1,133 @@
 #include "GamesManagement.h"
 
+void GamesManagement::start() {
+    srand(time(0));
+    //menu.loading_screen();
+    bool continueGame;
+    exit = false;
+    bot_level = 'a';
+    while (true) {
+        continueGame = menu.menuControl(twoGames, exit, isBot1, isBot2, bot_level, !game1_alive);
+        if (exit) return;
+        if (!continueGame) lunch();
+        runGames();
+    }
+}
+
 void GamesManagement::drawBorders(char color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x0F);
     gotoxy(Point::MIN_X1-1, Point::MIN_Y - 2);
-    cout << "Player1:          Next Shape: ";
+    std::cout << "Player1:          Next Shape: ";
 
     if (twoGames) { 
         gotoxy(Point::MIN_X2-1, Point::MIN_Y - 2);
-        cout << "Player2:          Next Shape: ";
+        std::cout << "Player2:          Next Shape: ";
     }
 	drawBordersAUX(Point::MIN_X1, Point::MIN_Y, _GAME_BORDER, color);
-    drawBordersAUX(Point::MIN_X1 + 6 + GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER, color);
+    drawBordersAUX(Point::MIN_X1 + 6 + GameConfig::GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER, color);
     if (twoGames) {
         drawBordersAUX(Point::MIN_X2, Point::MIN_Y, _GAME_BORDER, color);
-        drawBordersAUX(Point::MIN_X2 + 6 + GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER,color);
+        drawBordersAUX(Point::MIN_X2 + 6 + GameConfig::GAME_WIDTH, Point::MIN_Y, _NEXT_TETRO_BORDER,color);
     }
 };
 
 void GamesManagement::drawBordersAUX(int minx, int miny, bool isGameBorder, char color) {
-    int width = isGameBorder ? GAME_WIDTH : NEXT_TET_WIDTH;
-    int height = isGameBorder ? GAME_HEIGHT : NEXT_TET_HEIGHT;
+    int width = isGameBorder ? GameConfig::GAME_WIDTH : GameConfig::NEXT_TET_WIDTH;
+    int height = isGameBorder ? GameConfig::GAME_HEIGHT : GameConfig::NEXT_TET_HEIGHT;
     int backcolor = getColor(color);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
     {
         for (int col = minx; col < width + minx; col++)
         {
             gotoxy(col, miny - 1);
-            cout << "-";
+            std::cout << "-";
 
             gotoxy(col, height + miny);
-            cout << "-";
+            std::cout << "-";
         }
 
         for (int row = miny - 1; row <= height + miny; row++)
         {
             gotoxy(minx - 1, row);
-            cout << "|";
+            std::cout << "|";
 
             gotoxy(width + minx, row);
-            cout << "|";
+            std::cout << "|";
         }
     }
 }
 
-void GamesManagement::FlashBoarder() {
+void GamesManagement::runGames() {
 
-}
-
-void GamesManagement::runGames(bool& continueGame, bool& bot, bool& twoBots, bool& colorsMode, bool& exit) {
-    bool twoPlayerMode = true; //Change
-
-    dropped1 = dropped2 = false;
-    game1_alive = game2_alive = true;
-    game1.next.jumpTo(GameMech::NEXT_X,GameMech::NEXT_Y);
+    game1.curr.draw();
     game1.next.draw();
+    game1.board.draw();
     game1.board.updateScore(0);
-    if (twoGames) { 
-        game2.next.jumpTo(GameMech::NEXT_X, GameMech::NEXT_Y);
+    if (twoGames) {
         game2.next.draw();
+        game2.next.draw();
+        game2.board.draw();
         game2.board.updateScore(0);
     }
     drawBorders();
-    while (game1_alive && game2_alive) {
+
+    while (game1_alive &&  game2_alive) {
         int keyPressed = 0;
+        if (!bot2_down && !dropped2 && isBot2) {
+            int move = bot2.nextMove(game2);
+            if (!move) bot2_down = true;
+            else movment(move);
+        }
+        if (!bot1_down && !dropped1 && isBot1) {
+            int move = bot1.nextMove(game1);
+            if (!move) bot1_down = true;
+            else movment(move);
+        }
         if (_kbhit()) {
             keyPressed = _getch();
-            if (keyPressed == (int)eKeys1::ESC) {
-                continueGame = menuControl(continueGame, bot, twoBots, colorsMode, exit);
-                if (exit) return;
-                if (continueGame) {
-                    game1.curr.draw();
-                    game1.next.draw();
-                    game1.board.draw();
-                    game1.board.updateScore(0);
-                    if (twoGames) {
-                        game2.next.draw();
-                        game2.next.draw();
-                        game2.board.draw();
-                        game2.board.updateScore(0);
-                    }
-                    drawBorders();
-                }
-                else
-                    return;
-            }
-            if (bot) movment(getBotMove(true));
-            if(twoBots)
-                movment(getBotMove(false));
-            else
-              movment(keyPressed);
+            if (keyPressed == (int)GameConfig::eKeys1::ESC) return;
+            movment(keyPressed, bot_mod);
         }
-        clock.addMiliSeconds(50);
-        if (++counter == threshHold) {
+        clock.addMiliSeconds(speed);
+        if (++counter == _THRESHHOLD_SPEED) {
             counter = 0;
             reachedThreshHold++;
             game1_alive = game1.run(dropped1);
             if (twoGames)
                 game2_alive = game2.run(dropped2);
             dropped1 = dropped2 = false;
+            bot1_down = false;
+            bot2_down = false;
         }
-        if (reachedThreshHold == _SPEED_UP && threshHold>=_MAX_SPEED) {
-            --threshHold;
+        if (reachedThreshHold == _SPEED_UP && speed>=_MAX_SPEED) {
+            --speed;
             reachedThreshHold = 0;
         }
     }
-    continueGame = true;
     endGame();
 }
 
-void GamesManagement::movment(int key) {
-    if (!dropped1) {
+void GamesManagement::movment(int key, int mode) {
+    if (mode < 2 && !dropped1) {
         switch (key) {
-        case (int)eKeys1::LEFT:
-        case (int)eKeys1::LEFT + CAPITAL:
-            game1.curr.sideMove(game1.board, _LEFT);
+        case (int)GameConfig::eKeys1::LEFT:
+        case (int)GameConfig::eKeys1::LEFT + CAPITAL:
+            game1.curr.sideMove(game1.board, Tetromino::_LEFT);
             break;
-        case (int)eKeys1::RIGHT:
-        case (int)eKeys1::RIGHT + CAPITAL:
-            game1.curr.sideMove(game1.board, _RIGHT);
+        case (int)GameConfig::eKeys1::RIGHT:
+        case (int)GameConfig::eKeys1::RIGHT + CAPITAL:
+            game1.curr.sideMove(game1.board, Tetromino::_RIGHT);
             break;
-        case (int)eKeys1::ROTATE_CLOCKWISE:
-        case (int)eKeys1::ROTATE_CLOCKWISE + CAPITAL:
-            game1.curr.rotate(game1.board, _ROTATE_CLOCKWISE);
+        case (int)GameConfig::eKeys1::ROTATE_CLOCKWISE:
+        case (int)GameConfig::eKeys1::ROTATE_CLOCKWISE + CAPITAL:
+            game1.curr.rotate(game1.board, Tetromino::_ROTATE_CLOCKWISE);
             break;
-        case (int)eKeys1::ROTATE_COUNTERCLOCKWISE:
-        case (int)eKeys1::ROTATE_COUNTERCLOCKWISE + CAPITAL:
-            game1.curr.rotate(game1.board, _ROTATE_COUNTERCLOCKWISE);
+        case (int)GameConfig::eKeys1::ROTATE_COUNTERCLOCKWISE:
+        case (int)GameConfig::eKeys1::ROTATE_COUNTERCLOCKWISE + CAPITAL:
+            game1.curr.rotate(game1.board, Tetromino::_ROTATE_COUNTERCLOCKWISE);
             break;
-        case (int)eKeys1::DROP:
-        case (int)eKeys1::DROP + CAPITAL:
+        case (int)GameConfig::eKeys1::DROP:
+        case (int)GameConfig::eKeys1::DROP + CAPITAL:
             dropped1 = true;
             game1.curr.dropDown(game1.board);
             game1.board.draw();
@@ -137,26 +136,26 @@ void GamesManagement::movment(int key) {
             break;
         }
     }
-    if (twoGames && !dropped2) {
+    if (mode < 1 && twoGames && !dropped2) {
         switch (key) {
-        case (int)eKeys2::LEFT:
-        case (int)eKeys2::LEFT + CAPITAL:
-            game2.curr.sideMove(game2.board, _LEFT);
+        case (int)GameConfig::eKeys2::LEFT:
+        case (int)GameConfig::eKeys2::LEFT + CAPITAL:
+            game2.curr.sideMove(game2.board, Tetromino::_LEFT);
             break;
-        case (int)eKeys2::RIGHT:
-        case (int)eKeys2::RIGHT + CAPITAL:
-            game2.curr.sideMove(game2.board, _RIGHT);
+        case (int)GameConfig::eKeys2::RIGHT:
+        case (int)GameConfig::eKeys2::RIGHT + CAPITAL:
+            game2.curr.sideMove(game2.board, Tetromino::_RIGHT);
             break;
-        case (int)eKeys2::ROTATE_CLOCKWISE:
-        case (int)eKeys2::ROTATE_CLOCKWISE + CAPITAL:
-            game2.curr.rotate(game2.board, _ROTATE_CLOCKWISE);
+        case (int)GameConfig::eKeys2::ROTATE_CLOCKWISE:
+        case (int)GameConfig::eKeys2::ROTATE_CLOCKWISE + CAPITAL:
+            game2.curr.rotate(game2.board, Tetromino::_ROTATE_CLOCKWISE);
             break;
-        case (int)eKeys2::ROTATE_COUNTERCLOCKWISE:
-        case (int)eKeys2::ROTATE_COUNTERCLOCKWISE + CAPITAL:
-            game2.curr.rotate(game2.board, _ROTATE_COUNTERCLOCKWISE);
+        case (int)GameConfig::eKeys2::ROTATE_COUNTERCLOCKWISE:
+        case (int)GameConfig::eKeys2::ROTATE_COUNTERCLOCKWISE + CAPITAL:
+            game2.curr.rotate(game2.board, Tetromino::_ROTATE_COUNTERCLOCKWISE);
             break;
-        case (int)eKeys2::DROP:
-        case (int)eKeys2::DROP + CAPITAL:
+        case (int)GameConfig::eKeys2::DROP:
+        case (int)GameConfig::eKeys2::DROP + CAPITAL:
             dropped2 = true;
             game2.curr.dropDown(game2.board);
             game2.board.draw();
@@ -167,35 +166,31 @@ void GamesManagement::movment(int key) {
     }
 }
 
-int GamesManagement::getBotMove(bool isGame2) {
-    GoodPosition goodPositions = GoodPosition(isGame2 ? game2 : game1);
-    TetroBot tetroBot;
-    MovesList movesList = tetroBot.getMovesList(isGame2 ? game2.board : game1.board,
-        goodPositions.getGoodPosition(), &(isGame2 ? game2.curr : game1.curr)); //TODO: add bot level
-    moves move = movesList.popHead();
-    (int)eKeys1::LEFT;
-    int keyMove = 0;
-    switch (move) {
-    case moves::RIGHT:
-        keyMove = isGame2 ? (int)eKeys2::RIGHT : (int)eKeys1::RIGHT;
-        break;
-    case moves::ROTATE_COUNTERCLOCKWISE:
-        keyMove = isGame2 ? (int)eKeys2::ROTATE_COUNTERCLOCKWISE : (int)eKeys1::ROTATE_COUNTERCLOCKWISE;
-        break;
-    case moves::DOWN:
-        break;
-    default:
-        break;
+void GamesManagement::lunch() {
+    counter = 0; speed = _DEFAULT_SPEED; reachedThreshHold = 0;  bot_mod = 0;
+    dropped1 = dropped2 = false;
+    game1_alive = game2_alive = true;
+
+    game1 = GameMech(GameConfig::IS_GAME1);
+    game1.curr.jumpTo(GameConfig::STARTING_X, GameConfig::STARTING_Y);
+    game1.next.jumpTo(GameConfig::NEXT_X, GameConfig::NEXT_Y);
+    if (twoGames) {
+        game2 = GameMech(GameConfig::IS_GAME2);
+        game2.curr.jumpTo(GameConfig::STARTING_X, GameConfig::STARTING_Y);
+        game2.next.jumpTo(GameConfig::NEXT_X, GameConfig::NEXT_Y);
     }
-    return keyMove;
-}
 
+    if (isBot1) {
+        bot1_down = false;
+        bot1.setBot(GameConfig::IS_GAME1, bot_level);
+        bot_mod++;
+    }
+    if (isBot2) {
+        bot2_down = false;
+        bot2.setBot(GameConfig::IS_GAME2, bot_level);
+        bot_mod++;
+    }
 
-void GamesManagement::lunch(bool isTwoGames) {
-    srand(time(0));
-    counter = 0; threshHold = _DEFAULT_SPEED; reachedThreshHold = 0; twoGames = isTwoGames;
-    game1 = GameMech(true);
-    if (isTwoGames) game2 = GameMech(false);
 }
 
 void GamesManagement::endGame() {
@@ -216,7 +211,7 @@ void GamesManagement::endGame() {
 }
 
 void GamesManagement::winner(int n) {
-    setColor(getColor(COLOR_TEXT));
+    menu.setColor(getColor(COLOR_TEXT));
     system("cls");
     std::cout << "\n\n\n\n\n                                    tetrip :(" << std::endl;
     Sleep(1000);

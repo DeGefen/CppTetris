@@ -1,7 +1,6 @@
 #ifndef TETRIS_CLOCK_H
 #define TETRIS_CLOCK_H
 
-#include <Windows.h>
 #include "general.h"
 
 class Clock {

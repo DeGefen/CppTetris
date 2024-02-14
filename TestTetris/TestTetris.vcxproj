@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Clock.h" />
+    <ClInclude Include="GameConfig.h" />
     <ClInclude Include="GameMech.h" />
     <ClInclude Include="GamesManagement.h" />
     <ClInclude Include="general.h" />
@@ -160,7 +161,6 @@
     <ClInclude Include="MovesList.h" />
     <ClInclude Include="MovesNode.h" />
     <ClInclude Include="Point.h" />
-    <ClInclude Include="Runner.h" />
     <ClInclude Include="Tetrobot.h" />
     <ClInclude Include="Tetromino.h" />
   </ItemGroup>

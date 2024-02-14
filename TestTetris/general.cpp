@@ -4,7 +4,7 @@ void gotoxy(int x, int y)
 {
 	HANDLE hConsoleOutput;
 	COORD dwCursorPosition;
-	cout.flush();
+	std::cout.flush();
 	dwCursorPosition.X = x;
 	dwCursorPosition.Y = y;
 	hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -41,8 +41,8 @@ int getColor(char c) {
 	case 'Z':
 		color = 0x44;
 		break;
-	case 'B':
-		color = 0xff;
+	case GameConfig::BOMB:
+		color = 0x40;
 		break;
 	case COLOR_BORDER:
 		color = 0x88;

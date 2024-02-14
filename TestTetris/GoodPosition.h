@@ -5,20 +5,34 @@
 #include "GoodPositionNode.h"
 
 class GoodPosition {
+
+
+
 	GoodPositionNode* head;
 	GoodPositionNode* tail;
 	int nodesCount;
-
+	char level;
 
 	void findGoodPositions(GameMech& game);
-	
-	void addNode(int coverage, int headX, int headY, int position, int blockedSpaces, int bottomY);
-	void findPlacement(GameMech& game); //WIP
+	void bombPosition(GameMech& game);
+
+	void addNode(int coverage, int headX, int headY, int position, int blockedSpaces, int bottomY, int linesAdded, int linesFilled, int emptyNeighbors);
 	void addToHead(GoodPositionNode* node);
 	void addToTail(GoodPositionNode* node);
+	void deleteNodes();
+	void addToPrev(GoodPositionNode* node, GoodPositionNode* newNode);
+
 public:
-	GoodPosition(GameMech& game) { findGoodPositions(game);}
-	GoodPositionNode* getGoodPosition(bool randPosition = false);
+	GoodPosition(GameMech& game, char level) :level(level) {
+		head = nullptr;
+		tail = nullptr;
+		findGoodPositions(game);
+	}
+	~GoodPosition() {
+		deleteNodes();
+	}
+	void removeFromHead();
+	GoodPositionNode* getGoodPosition(bool miss);
 };
 
 #endif // TETRIS_GOODPOSTION_H

@@ -1,7 +1,8 @@
 #include "MovesList.h"
 
-moves MovesList::popHead() {
-    moves move = head->move;
+MovesNode::moves MovesList::popHead() {
+    if (head == nullptr) return MovesNode::moves::DOWN;
+    MovesNode::moves move = head->move;
     removeFromHead();
     return move;
 }
@@ -20,30 +21,55 @@ void MovesList::addToHead(MovesNode* node) {
 }
 
 void MovesList::addToTail(MovesNode* node) {
-    tail->next = node;
-    node->prev = tail;
-    tail = node;
+    if (head == nullptr) {
+        head = node;
+        tail = node;
+    }
+    else {
+        tail->next = node;
+        node->prev = tail;
+        tail = node;
+    }
 }
 
 void MovesList::removeFromHead() {
     if (head == tail) {
-        head->deleteNode();
-        head = tail = nullptr;
+        delete [] head;
+        head = nullptr;
+        tail = nullptr;
         return;
     }
     head = head->next;
-    head->prev->deleteNode();
+    delete [] head->prev;
     head->prev = nullptr;
 }
 
 void MovesList::removeFromTail() {
     tail = tail->prev;
-    tail->next->deleteNode();
+    delete [] tail->next;
     tail->next = nullptr;
 }
 
-void MovesList::addMove(moves move) {
+void MovesList::addMove(MovesNode::moves move) {
     MovesNode* node = new MovesNode;
     node->move = move;
-    addToTail(node);
+    addToHead(node);
 }
+
+bool MovesList::isEmpty() const {
+    if (head == nullptr) return true;
+    return false;
+}
+
+void MovesList::empty() {
+    MovesNode* curr = tail;
+    MovesNode* next;
+    while (curr != nullptr) {
+        next = curr->next;
+        delete [] curr;
+        curr = next;
+    }
+    tail = nullptr;
+    head = nullptr;
+}
+

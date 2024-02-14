@@ -1,16 +1,13 @@
 #pragma once
 
-enum class moves {LEFT, RIGHT, DOWN, ROTATE_CLOCKWISE, ROTATE_COUNTERCLOCKWISE};
-
 class MovesNode {
 	void setNewNode();
 public:
+    enum class moves { LEFT, RIGHT, DOWN, ROTATE_CLOCKWISE, ROTATE_COUNTERCLOCKWISE, DROP};
+
     MovesNode() { setNewNode(); }
     MovesNode(const MovesNode& node) = delete;
     MovesNode operator=(const MovesNode& node) = delete;
-
-    void deleteNode();
-
 
     moves move;
     MovesNode* next = nullptr;
