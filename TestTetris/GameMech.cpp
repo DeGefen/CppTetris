@@ -11,7 +11,7 @@ bool GameMech::run(bool isDropped) { //returns false if player lost
 		curr = next;
 		bool isBomb = !(rand() % 20);
 		int nextTetType = isBomb ? 7 : rand() % 7;
-		next = Tetromino(nextTetType, game);
+		next = Tetromino(nextTetType, game, color_mod);
 		curr.jumpTo(GameConfig::STARTING_X, GameConfig::STARTING_Y);
 		curr.draw();
 		next.jumpTo(GameConfig::NEXT_X, GameConfig::NEXT_Y);
@@ -23,9 +23,9 @@ bool GameMech::run(bool isDropped) { //returns false if player lost
 
 void GameMech::lunch() {
 	foundBomb = false;
-	next = Tetromino(rand() % 7, game);
-	curr = Tetromino(rand() % 7, game);
+	next = Tetromino(rand() % 7, game, color_mod);
+	curr = Tetromino(rand() % 7, game, color_mod);
 	curr.jumpTo(GameConfig::STARTING_X, GameConfig::STARTING_Y);
 	next.jumpTo(GameConfig::NEXT_X, GameConfig::NEXT_Y);
-	board = Board(game);
+	board = Board(game, color_mod);
 }

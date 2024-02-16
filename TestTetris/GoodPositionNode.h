@@ -9,6 +9,9 @@ public:
 		next = nullptr;
 		prev = nullptr;
 	}
+	GoodPositionNode operator=(GoodPositionNode & pos) = delete;
+	GoodPositionNode* operator=(GoodPositionNode* pos) = delete;
+	~GoodPositionNode() { delete[] this; }
 
 	int headX;
 	int headY;
@@ -20,7 +23,7 @@ public:
 	int linesFilled;
 	int neighbors;
 
-	bool betterThen(GoodPositionNode* node);
+	bool betterThen(GoodPositionNode* node) const ;
 
 	GoodPositionNode* next;
 	GoodPositionNode* prev;

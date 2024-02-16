@@ -19,7 +19,6 @@ class GoodPosition {
 	void addNode(int coverage, int headX, int headY, int position, int blockedSpaces, int bottomY, int linesAdded, int linesFilled, int emptyNeighbors);
 	void addToHead(GoodPositionNode* node);
 	void addToTail(GoodPositionNode* node);
-	void deleteNodes();
 	void addToPrev(GoodPositionNode* node, GoodPositionNode* newNode);
 
 public:
@@ -28,11 +27,9 @@ public:
 		tail = nullptr;
 		findGoodPositions(game);
 	}
-	~GoodPosition() {
-		deleteNodes();
-	}
-	void removeFromHead();
-	GoodPositionNode* getGoodPosition(bool miss);
+
+	void remove(GoodPositionNode* node);
+	GoodPositionNode* getGoodPosition(bool miss) const;
 };
 
 #endif // TETRIS_GOODPOSTION_H

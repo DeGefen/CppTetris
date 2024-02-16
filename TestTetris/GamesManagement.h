@@ -10,21 +10,20 @@
 #include "Menu.h"
 #include "GoodPosition.h"
 #include "Tetrobot.h"
-//#include "GoodPositionNode.h"
 
 class GamesManagement {
 public:
     void start();
+    GamesManagement operator=(const GamesManagement& games) = delete;
 
 private:
-    static constexpr int CAPITAL = 'A' - 'a';
     static constexpr bool _GAME_BORDER = 1;
     static constexpr bool _NEXT_TETRO_BORDER = 0;
 
     static constexpr int _SPEED_UP = 100;
     static constexpr int _MAX_SPEED = 5;
-    static constexpr int _DEFAULT_SPEED = 10;
-    static constexpr int _THRESHHOLD_SPEED = 10;
+    static constexpr int _DEFAULT_SPEED = 20;
+    static constexpr int _THRESHHOLD = 7;
 
     GameMech game1;
     GameMech game2;
@@ -48,12 +47,10 @@ private:
     bool isBot2;
     bool bot1_down;
     bool bot2_down;
+    bool *color_mod;
 
-
-
-    void drawBorders(char color = COLOR_BORDER);
+    void drawBorders(char color = GameConfig::COLOR_BORDER);
     void drawBordersAUX(int minx, int miny, bool isGameBorder, char color);
-    void FlashBoarder();
     void movment(int key, int mode=0);
     void lunch();
     void endGame();

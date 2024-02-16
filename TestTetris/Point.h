@@ -7,22 +7,31 @@
 
 
 class Point {
-	bool isGame1;
-
-
 public:
+	Point(bool game = true, bool* color_mod = nullptr) { isGame1 = game; this->color_mod = color_mod; }
+
+	Point operator=(const Point& p) {
+		color_mod = p.color_mod;
+		isGame1 = p.isGame1;
+		return this;
+	}
+
+	bool isGame1;
+	bool* color_mod;
+
+	enum class color {};
 
 	int x;
 	int y;
 
-	Point(bool game = true) { isGame1 = game; }
 
 	static constexpr int MIN_Y = 3;
 	static constexpr int MIN_X1 = 2;
 	static constexpr int MIN_X2 = 40;
 
-	void init(int x, int y);
-	void draw(char ch);
+	void init(int x, int y) ;
+	void draw(char ch) const;
+	static int getColor(char c);
 };
 
 #endif

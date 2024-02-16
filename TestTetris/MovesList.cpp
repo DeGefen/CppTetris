@@ -34,19 +34,16 @@ void MovesList::addToTail(MovesNode* node) {
 
 void MovesList::removeFromHead() {
     if (head == tail) {
-        delete [] head;
         head = nullptr;
         tail = nullptr;
         return;
     }
     head = head->next;
-    delete [] head->prev;
     head->prev = nullptr;
 }
 
 void MovesList::removeFromTail() {
     tail = tail->prev;
-    delete [] tail->next;
     tail->next = nullptr;
 }
 
@@ -66,7 +63,6 @@ void MovesList::empty() {
     MovesNode* next;
     while (curr != nullptr) {
         next = curr->next;
-        delete [] curr;
         curr = next;
     }
     tail = nullptr;

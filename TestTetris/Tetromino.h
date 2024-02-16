@@ -9,15 +9,16 @@
 class Tetromino {
 public:
 
+    enum class tetromino_shape {I,O,T,J,L,S,Z,BOMB};
 
     static constexpr int _LEFT = -1;
     static constexpr int _RIGHT = 1;
     static constexpr int _ROTATE_CLOCKWISE = -1;
     static constexpr int _ROTATE_COUNTERCLOCKWISE = 1;
 
-    Tetromino(int i = 0, bool b = true) { game = b; setTetro(i); position = 0; }
+    Tetromino(int i = 0, bool game = true, bool* color_mod = nullptr) {setTetro(i); position = 0; p = Point(game ,color_mod); }
     Tetromino& operator=(const Tetromino& tetro) {
-        game = tetro.game;
+        p = tetro.p;
         setTetro(tetro.type);
         position = 0;
         return *this;
@@ -29,17 +30,15 @@ public:
     bool move(Board& board, bool drawMod = true);
     void draw();
     void erase();
-    int getCoverage(int& heady);
+    int getCoverage(int& heady) const;
     bool checkTetroMove(Board& board);
-    int getBlockedSpaces(Board& board,int x, int y);
-    int getMinX() const;
-    int getMaxX() const;
+    int getBlockedSpaces(Board& board,int x, int y) ;
     int getHeadX() const;
     int getHeadY() const;
     char getType() const;
     int getHight() const;
-    int getPotential(ListNode* node);
-    int getNeighbors(Board& board, int x, int y);
+    int getPotential(ListNode* node) const;
+    int getNeighbors(Board& board, int x, int y) const;
 
     short position = 0;
     short numOfPositions;
@@ -51,7 +50,6 @@ private:
     int cordY[16];
     char type;
     Point p;
-    bool game;
 
     void copyCords(int* arr1,const int* arr2);
     void setTetro(int num);

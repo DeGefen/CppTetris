@@ -2,6 +2,7 @@
 #define TETRIS_CLOCK_H
 
 #include "general.h"
+#include "Point.h"
 
 class Clock {
 	unsigned int miliSeconds = 0;
@@ -11,7 +12,7 @@ class Clock {
 	int min_y = 22;
 public:
 	void addMiliSeconds(unsigned int ms);
-	void drawClock(int minx, int miny);
+	void drawClock(int minx, int miny) const ;
 	void reset();
 };
 

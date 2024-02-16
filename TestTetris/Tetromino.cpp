@@ -167,10 +167,9 @@ void Tetromino::erase() {
 };
 
 void Tetromino::setTetro(int num) {
-    switch (num)
-    {
+    switch (num) {
     case 'I':
-    case 0:// tetro I
+    case (int)tetromino_shape::I:// tetro I
     {
         int x[16] = { 0,0,0,0,0,-1,1,2 };
         int y[16] = { 2,1,0,-1,0,0,0,0 };
@@ -181,7 +180,7 @@ void Tetromino::setTetro(int num) {
         break;
     }
     case 'O':
-    case 1: // tetro O
+    case (int)tetromino_shape::O: // tetro O
     {
         int x[16] = { 1,0,1,0 };
         int y[16] = { 1,1,0,0 };
@@ -192,7 +191,7 @@ void Tetromino::setTetro(int num) {
         break;
     }
     case 'T':
-    case 2: // tetro T
+    case (int)tetromino_shape::T: // tetro T
     {
         int x[16] = { 0, 1, -1, 0,   0, 0, -1, 0,   0, -1, 1, 0,   0, 0, 1, 0 };
         int y[16] = { 0, 0, 0, -1,   1, 0, 0, -1,   1, 0, 0, 0,    1, 0, 0, -1 };
@@ -203,7 +202,7 @@ void Tetromino::setTetro(int num) {
         break;
     }
     case 'J':
-    case 3: // tetro J
+    case (int)tetromino_shape::J: // tetro J
     {
         int x[16] = { 0, -1, 0, 0,   1, -1, 1, 0,    0, 0, 0, 1,    0, 1, -1, -1 };
         int y[16] = { 1, 1, 0, -1,   1, 0, 0, 0,    1, 0, -1, -1,    0, 0, 0, -1 };
@@ -214,7 +213,7 @@ void Tetromino::setTetro(int num) {
         break;
     }
     case 'L':
-    case 4: // tetro L
+    case (int)tetromino_shape::L: // tetro L
     {
         int x[16] = { 0, 1, 0, 0,   0, -1, 1, 1,   0, 0, 0, -1,    -1, 1, -1, 0 };
         int y[16] = { 1, 1, 0, -1,   0, 0, 0, -1,   1, 0, -1, -1,   1, 0, 0, 0 };
@@ -225,7 +224,7 @@ void Tetromino::setTetro(int num) {
         break;
     }
     case 'S':
-    case 5: // tetro S
+    case (int)tetromino_shape::S: // tetro S
     {
         int x[16] = { 0, -1, 0, 1,    1, 0, 1, 0 };
         int y[16] = { 1, 1, 0, 0,    1, 0, 0, -1 };
@@ -236,7 +235,7 @@ void Tetromino::setTetro(int num) {
         break;
     }
     case 'Z':
-    case 6: // tetro Z
+    case (int)tetromino_shape::Z: // tetro Z
     {
         int x[16] = { 1, 0, -1, 0,    -1, 0, -1, 0 };
         int y[16] = { 1, 1, 0, 0,    1, 0, 0, -1 };
@@ -247,7 +246,7 @@ void Tetromino::setTetro(int num) {
         break;
     }
     case GameConfig::BOMB:
-    case 7:
+    case (int)tetromino_shape::BOMB:
     {
         int x[16] = { 0,0,0,0 };
         int y[16] = { 0,0,0,0 };
@@ -257,10 +256,9 @@ void Tetromino::setTetro(int num) {
         type = GameConfig::BOMB;
         break; }
     }
-    p = Point(game);
 }
 
-int Tetromino::getCoverage(int& headY) {
+int Tetromino::getCoverage(int& headY) const{
     int maxY = 0;
     int count = 0;
     for (int i = 0; i < GameConfig::NUM_OF_CORDS; ++i) {
@@ -277,22 +275,23 @@ int Tetromino::getCoverage(int& headY) {
     return count;
 }
 
-int Tetromino::getNeighbors(Board& board, int x, int y){
+int Tetromino::getNeighbors(Board& board, int x, int y) const{
     int cordIndex = GameConfig::NUM_OF_CORDS * position;
     std::vector<int> cords_checkList;
     bool same_cord_right = false;
     bool same_cord_left = false;
+    int arr[7][7] = {0};
+
+    for (int i = 0; i < GameConfig::NUM_OF_CORDS; ++i) {
+        ++arr[cordX[cordIndex + i] + 3][cordY[cordIndex + i] + 3];
+    }
 
     for (int i = 0; i < GameConfig::NUM_OF_CORDS; ++i, same_cord_right = false, same_cord_left) {
-        for (int j = i - 1; j >= 0; --j) {
-            if (cordX[cordIndex + i] + 1 == cordX[cordIndex + j]) same_cord_right = true;
-            if (cordX[cordIndex + i] - 1 == cordX[cordIndex + j]) same_cord_left = true;
-        }
-        if (!same_cord_right) {
+        if (arr[cordX[cordIndex + i] + 3 + 1][cordY[cordIndex + i] + 3]++ == 0) {
             cords_checkList.push_back(x + cordX[i + cordIndex] + 1);
             cords_checkList.push_back(y + cordY[i + cordIndex]);
         }
-        if (!same_cord_left) {
+        if (arr[cordX[cordIndex + i] + 3 - 1][cordY[cordIndex + i] + 3]++ == 0) {
             cords_checkList.push_back(x + cordX[i + cordIndex] - 1);
             cords_checkList.push_back(y + cordY[i + cordIndex]);
         }
@@ -304,32 +303,17 @@ int Tetromino::getBlockedSpaces(Board& board, int x, int y) {
     int cordIndex = GameConfig::NUM_OF_CORDS * position;
     std::vector<int> cords_checkList;
     bool same_cord = false;
+    int arr[5] = { 0 };
 
-    for (int i = 0; i < GameConfig::NUM_OF_CORDS; ++i, same_cord=false) {
-        for (int j = i - 1; j >= 0; --j) {
-            if (cordX[cordIndex + i] == cordX[cordIndex + j]) same_cord = true;
-        }
-        if (!same_cord) {
-            cords_checkList.push_back(x + cordX[i+cordIndex]);
-            cords_checkList.push_back(y + cordY[i+cordIndex] + 1);
+    for (int i = 0; i < GameConfig::NUM_OF_CORDS; ++i) {
+        if (++arr[cordX[cordIndex + i] + 2] == 1) {
+            cords_checkList.push_back(x + cordX[i + cordIndex]);
+            cords_checkList.push_back(y + cordY[i + cordIndex] + 1);
         }
     }
     return board.matchCords(cords_checkList);
 }
 
-int Tetromino::getMinX() const{
-    int minX = 0;
-    int index = GameConfig::NUM_OF_CORDS * position;
-    for (int i = 0; i < GameConfig::NUM_OF_CORDS; ++i) if (cordX[index + i] < minX) minX = cordX[index + i];
-    return minX;
-}
-
-int Tetromino::getMaxX() const{
-    int maxX = 0;
-    int index = GameConfig::NUM_OF_CORDS * position;
-    for (int i = 0; i < GameConfig::NUM_OF_CORDS; ++i) if (cordX[index + i] > maxX) maxX = cordX[index + i];
-    return maxX;
-}
 int Tetromino::getHeadX () const{
     return headX;
 }
@@ -370,7 +354,7 @@ void Tetromino::plantBomb(Board& board) {
     } 
 }
 
-int Tetromino::getPotential(ListNode* node) {
+int Tetromino::getPotential(ListNode* node) const {
     int rowCount = 1;
     int fillCount = 0;
     int y = cordY[0];

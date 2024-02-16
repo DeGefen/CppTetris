@@ -13,14 +13,14 @@
 class GameMech {
     bool game;
     bool foundBomb;
+    bool* color_mod;
 public:
-    GameMech(bool b = true) { game = b; lunch(); }
+    GameMech(bool b = true, bool* color_mod=nullptr):game(game), color_mod(color_mod) {lunch();}
 
     Board board;
     Tetromino next;
     Tetromino curr;
     bool run(bool isDropped);
     void lunch();
-
 };
 #endif //TETRIS_GAMEMECH_H

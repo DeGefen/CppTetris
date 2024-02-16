@@ -1,53 +1,13 @@
 #include "Tetrobot.h"
 
-/*MovesList TetroBot::getMovesList(Board& board, GoodPositionNode* goodPos, Tetromino& upTet) {
-	int heightDiff = goodPos->headY - upTet.getHeadY();
-	int sideDiff = upTet.getHeadX() - goodPos->headX;
-	Tetromino downTet = getTetFromPos(goodPos, upTet);
-	int linesToCheckCount = board.count() - goodPos->headY;
-	bool MoveRight, canMoveSidways;
-	int xSaver;
-	MovesList movesList;
-
-	for (int i = 0; i < heightDiff; i++) {
-		downTet.jumpTo(downTet.getHeadY() - 1, downTet.getHeadX());
-		bool canMoveUp = downTet.checkTetroMove(board);
-		if (!canMoveUp) {
-			//downTet.jumpTo(downTet.getHeadY() - 1, downTet.getHeadX());
-			xSaver = downTet.getHeadX();
-			canMoveSidways = false;
-			MoveRight = true;
-		}
-		while (!canMoveUp) {
-			downTet.jumpTo(downTet.getHeadY(), downTet.getHeadX() + MoveRight * 1);
-			canMoveSidways = downTet.checkTetroMove(board);
-			if (!canMoveSidways) {
-				downTet.jumpTo(downTet.getHeadY(), xSaver);
-				MoveRight = false;
-			}
-			downTet.jumpTo(downTet.getHeadY() - 1, downTet.getHeadX());
-			canMoveUp = downTet.checkTetroMove(board);
-			if (!canMoveUp)
-				downTet.jumpTo(downTet.getHeadY() + 1, downTet.getHeadX());
-			else for (int j = 0; j < abs(downTet.getHeadX() - xSaver); j++) {
-				movesList.addMove(moves(MoveRight * 1));
-			}
-		}
-		movesList.addMove(moves(2));
-	}
-	for (int i = 0; i < goodPos->position; i++) {
-		movesList.addMove(moves(5)); //TODO : check if right direction
-	}
-		
-	return MovesList();
-} */
+void TetroBot::setTetToPos(GoodPositionNode* pos, Tetromino& tetro) {
+	tetro.jumpTo(pos->headX, pos->headY);
+	tetro.position = pos->position;
+}
 
 bool TetroBot::getMovesList(GameMech& game, GoodPositionNode* goodPos) {
 	Tetromino &tetro = game.curr;
-	int heightDiff = goodPos->headY - tetro.getHeadY();
-	int sideDiff = tetro.getHeadX() - goodPos->headX;
-	int linesToCheckCount = game.board.count() - goodPos->headY;
-	std::vector<GoodPositionNode> checkPoint;
+	std::vector<GoodPositionNode*> checkPoint;
 	int lastCheckPoint = 0;
 	setTetToPos(goodPos, tetro);
 	bool topBlocked = false;
@@ -62,7 +22,7 @@ bool TetroBot::getMovesList(GameMech& game, GoodPositionNode* goodPos) {
 		if (tetro.checkTetroMove(game.board)) {
 			if (!topBlocked) {
 				movesList.addMove(MovesNode::moves::DOWN);
-				GoodPositionNode node(tetro.getHeadX(), tetro.getHeadY() + 1, tetro.position);
+				GoodPositionNode* node = new GoodPositionNode(tetro.getHeadX(), tetro.getHeadY() + 1, tetro.position);
 				checkPoint.push_back(node);
 				lastCheckPoint = 1;
 				leftBlocked = false;
@@ -92,8 +52,8 @@ bool TetroBot::getMovesList(GameMech& game, GoodPositionNode* goodPos) {
 			rightBlocked = true;
 		}
 		if (!checkPoint.empty()) {
-			GoodPositionNode node = checkPoint.back();
-			setTetToPos(&node, tetro);
+			GoodPositionNode* node = checkPoint.back();
+			setTetToPos(node, tetro);
 			checkPoint.pop_back();
 			for (; lastCheckPoint > 0; lastCheckPoint--) {
 				movesList.popHead();
@@ -124,12 +84,6 @@ bool TetroBot::getMovesList(GameMech& game, GoodPositionNode* goodPos) {
 	return true;
 }
 
-
-void TetroBot::setTetToPos(GoodPositionNode* pos, Tetromino &tetro) {
-	tetro.jumpTo(pos->headX, pos->headY);
-	tetro.position = pos->position;
-}
-
 int TetroBot::nextMove(GameMech& game) {//TODO: add bot level
 	int keyMove = 0;
 	bool miss = false;
@@ -137,22 +91,24 @@ int TetroBot::nextMove(GameMech& game) {//TODO: add bot level
 		++moves_count;
 		switch (level) {
 		case 'c':
-			if (moves_count == 10 + (rand() % 6 - 3)) {
+			if (moves_count >= 10 + (rand() % 6 - 3)) {
 				miss = true;
 				moves_count = 0;
 			}
 			break;
 		case 'b':
-			if (moves_count == 40 + (rand() % 10 - 5)) {
+			if (moves_count >= 40 + (rand() % 10 - 5)) {
 				miss = true;
 				moves_count = 0;
 			}
 		}
 		movesList.empty();
+		GoodPositionNode* node = nullptr;
 		GoodPosition goodPositions(game, level);
-		while (!getMovesList(game, goodPositions.getGoodPosition(miss))) {
-			goodPositions.removeFromHead();
-		}
+		do {
+			goodPositions.remove(node);
+			node = goodPositions.getGoodPosition(miss);
+		} while (!getMovesList(game, node));
 	}
 	MovesNode::moves move = movesList.popHead();
 	switch (MovesNode::moves(move)) {

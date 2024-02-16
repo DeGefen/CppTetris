@@ -1,13 +1,14 @@
 #include "GoodPosition.h"
 
 
-GoodPositionNode* GoodPosition::getGoodPosition(bool miss) {
-    GoodPositionNode* node = head;
+GoodPositionNode* GoodPosition::getGoodPosition(bool miss) const {
     if (!miss) {
-        return node;
+        return head;
     }
-    int index = (rand() % nodesCount-1) + 1;
-    for (int i = 0; i < index; ++i) node = node->prev;
+    GoodPositionNode* node = tail;
+    if (nodesCount > 3) {
+        for (int i = rand() % 3; i > 0; i--) node = node->prev;
+    }
     return node;
 }
 
@@ -21,7 +22,6 @@ void GoodPosition::findGoodPositions(GameMech& game) {
     int headY = 0;
     int coverage;
     int maxCoverage = 0;
-    int blockedSpaces;
     int neighbors;
     int linesAdded;
 
@@ -32,14 +32,13 @@ void GoodPosition::findGoodPositions(GameMech& game) {
     }
 
     while (curr != nullptr) {
-        coverage = game.curr.getCoverage(headY);
         for (int x = 0; x < GameConfig::GAME_WIDTH; ++x) {
+            coverage = game.curr.getCoverage(headY);
             game.curr.jumpTo(x, currY + headY);
-            neighbors = game.curr.getNeighbors(game.board, x, currY + headY);
-            blockedSpaces = game.curr.getBlockedSpaces(game.board, x, currY + headY);
-            linesAdded = (GameConfig::GAME_HEIGHT - game.board.count()) - (headY + currY + game.curr.getHight());
             if (game.curr.checkTetroMove(game.board) && game.curr.getHeadY() + game.curr.getHight() >= 0) {
-                addNode(coverage, x, currY + headY, game.curr.position, blockedSpaces, currY, (linesAdded > 0) ? linesAdded : 0, game.curr.getPotential(curr), neighbors);
+                neighbors = game.curr.getNeighbors(game.board, x, currY + headY);
+                linesAdded = (GameConfig::GAME_HEIGHT - game.board.count()) - (headY + currY + game.curr.getHight());
+                addNode(coverage, x, currY + headY, game.curr.position, game.curr.getBlockedSpaces(game.board, x, currY + headY), currY, (linesAdded > 0) ? linesAdded : 0, game.curr.getPotential(curr), neighbors);
             }
         }
         if (game.curr.numOfPositions - 1 == game.curr.position) {
@@ -52,10 +51,11 @@ void GoodPosition::findGoodPositions(GameMech& game) {
     while (game.curr.getCoverage(headY) != maxCoverage) {
         game.curr.rotate(game.board, 1, false);
     }
-    int x = (-1) * game.curr.getMinX();
-    linesAdded = (headY + currY + game.curr.getHight()) - (GameConfig::GAME_HEIGHT - game.board.count());
-    addNode(maxCoverage, x, currY + headY, game.curr.position, game.curr.getBlockedSpaces(game.board,x, currY + headY), currY, (linesAdded > 0) ? linesAdded : 0, 0, 0);
-    
+    coverage = game.curr.getCoverage(headY);
+    for (int x = 0; x < GameConfig::GAME_WIDTH; ++x) {
+        game.curr.jumpTo(x, currY + headY);
+        addNode(coverage, x, currY + headY, game.curr.position, game.curr.getBlockedSpaces(game.board, x, currY + headY), currY, ( - 1)* (headY + game.curr.getHight()), 0, 0);
+    }
     game.curr.jumpTo(GameConfig::STARTING_X, GameConfig::STARTING_Y);
     game.curr.position = 0;
 }
@@ -105,26 +105,30 @@ void GoodPosition::addNode(int coverage, int headX, int headY, int position, int
     ++nodesCount;
 }
 
-void GoodPosition::removeFromHead(){
+
+void GoodPosition::remove(GoodPositionNode* node) {
+    if (node == nullptr) return;
+    --nodesCount;
     if (head == tail) {
-        delete[] head;
         head = tail = nullptr;
         return;
     }
-    head = head->next;
-    delete[] head->prev;
-    head->prev = nullptr;
-}
-
-void GoodPosition::deleteNodes() {
-    GoodPositionNode* curr = tail;
-    GoodPositionNode* next;
-    while (curr != nullptr) {
-        next = curr->next;
-        delete[] curr;
-        curr = next;
+    if (node == head) {
+        head = head->next;
+        head->prev = nullptr;
+        return;
+    }
+    else if (node == tail) {
+        tail = tail->next;
+        tail->prev = nullptr;
+        return;
+    }
+    else {
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
     }
 }
+
 
 void GoodPosition::bombPosition(GameMech& game) {
     ListNode* curr = game.board.getTail();

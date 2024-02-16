@@ -15,9 +15,8 @@ void Clock::addMiliSeconds(unsigned int ms)
 	drawClock(min_x, min_y);
 }
 
-void Clock::drawClock(int minx, int miny)
-{
-	int backcolor = getColor(COLOR_INFO);
+void Clock::drawClock(int minx, int miny) const {
+	int backcolor = Point::getColor(GameConfig::COLOR_INFO);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
 	gotoxy(minx, miny);
 

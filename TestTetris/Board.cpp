@@ -21,20 +21,17 @@ void Board::addToTail(ListNode* node) {
 }
 void Board::removeFromTail() {
     tail = tail->prev;
-    tail->next->deleteNode();
     tail->next = nullptr;
     nodesCount--;
 }
 
 void Board::removeFromHead() {
     if (head == tail) {
-        head->deleteNode();
         head = tail = nullptr;
         nodesCount = 0;
         return;
     }
     head = head->next;
-    head->prev->deleteNode();
     head->prev = nullptr;
     nodesCount--;
 }
@@ -43,10 +40,9 @@ void Board::removeFromMiddle(ListNode* node) {
     node->next->prev = node->prev;
     node->prev->next = node->next;
     nodesCount--;
-    node->deleteNode();
 }
 
-ListNode* Board::getNodeFromIndex(int i) {
+ListNode* Board::getNodeFromIndex(int i) const  {
 
     int y = GameConfig::GAME_HEIGHT - nodesCount;
     ListNode* node = head;
@@ -77,35 +73,32 @@ void Board::draw(int from) { //draws board from the bottom, begin with "GAME_HEI
         }
 }
 
-void Board::updateScore(int i) {
+void Board::updateScore(add_score i) {
     switch (i) {
-    case 1:
+    case add_score::one_row:
         score += 40;
         break;
-    case 2:
+    case add_score::two_rows:
         score += 100;
         break;
-    case 3:
+    case add_score::three_rows:
         score += 300;
         break;
-    case 4:
+    case add_score::four_rows:
         score += 1200;
         break;
-    default: {}
+    default: break;
     }
     if (isGame1) drawScore(Point::MIN_X1 + (5 + GameConfig::GAME_WIDTH), 13);
     else  drawScore(Point::MIN_X2 + (5 + GameConfig::GAME_WIDTH), 13);
 }
 
-void Board::drawScore(int minx, int miny)
-{
-    {
-        int backcolor = getColor(COLOR_INFO);
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
-        gotoxy(minx, miny);
+void Board::drawScore(int minx, int miny) const {
+    int backcolor = Point::getColor(GameConfig::COLOR_INFO);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), backcolor);
+    gotoxy(minx, miny);
 
-        std::cout << "Score: " << score << std::endl;
-    }
+    std::cout << "Score: " << score << std::endl;
 }
 
 bool Board::checkFilled() {
@@ -128,7 +121,7 @@ bool Board::checkFilled() {
         node = next;
     }
     if (count > 0) {
-        updateScore(count);
+        updateScore(add_score(count));
     }
     erase();
     draw();
@@ -161,7 +154,7 @@ ListNode* Board::getHead() const {
     return head;
 }
 
-int Board::matchCords(std::vector<int>& cords, bool empty_mode) {
+int Board::matchCords(std::vector<int>& cords, bool empty_mode) const {
     int count = 0;
     ListNode* node;
     while (cords.size()>0) {
@@ -169,13 +162,17 @@ int Board::matchCords(std::vector<int>& cords, bool empty_mode) {
         cords.pop_back();
         int cordX = cords.back();
         cords.pop_back();
-        node = getNodeFromIndex(cordY);
-        if (empty_mode && cordY < GameConfig::GAME_HEIGHT && cordX >= 0 && cordX < GameConfig::GAME_WIDTH) {
-            if (node == nullptr) count++;
-            else if (node != nullptr && (node->line->arr[cordX] == GameConfig::SPACE || node->line->arr[cordX] == GameConfig::BOOM)) count++;
+        node = (cordY < GameConfig::GAME_HEIGHT - nodesCount) ? nullptr : getNodeFromIndex(cordY);
+        if (empty_mode) {
+            if (cordY < GameConfig::GAME_HEIGHT && cordX >= 0 && cordX < GameConfig::GAME_WIDTH) {
+                if (node == nullptr) count++;
+                if (node != nullptr && (node->line->arr[cordX] == GameConfig::SPACE || node->line->arr[cordX] == GameConfig::BOOM)) count++;
+            }
         }
-        else if (!empty_mode && (cordX < 0 || cordX >= GameConfig::GAME_WIDTH)) count++;
-        else if (!empty_mode && node != nullptr && (node->line->arr[cordX] != GameConfig::SPACE && node->line->arr[cordX] != GameConfig::BOOM)) count++;
+        else {
+            if (cordX < 0 || cordX >= GameConfig::GAME_WIDTH) count++;
+            else if (node != nullptr && (node->line->arr[cordX] != GameConfig::SPACE && node->line->arr[cordX] != GameConfig::BOOM)) count++;
+        }
     }
     return count;
 }
@@ -196,7 +193,7 @@ bool Board::blowBomb(ListNode* node) {
     return foundBomb;
 }
 
-int Board::getBoom(int x, int y) {
+int Board::getBoom(int x, int y) const {
     bool first_time = true;
     int count = 0;
     int j = 0;

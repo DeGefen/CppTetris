@@ -8,6 +8,9 @@ public:
     MovesNode() { setNewNode(); }
     MovesNode(const MovesNode& node) = delete;
     MovesNode operator=(const MovesNode& node) = delete;
+    MovesNode* operator=(const MovesNode* node) = delete;
+
+    ~MovesNode() { delete[] this; }
 
     moves move;
     MovesNode* next = nullptr;

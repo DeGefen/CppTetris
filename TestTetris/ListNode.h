@@ -9,6 +9,8 @@ public:
     ListNode() { setNewNode(); }
     ListNode(const ListNode& node) = delete;
     ListNode operator=(const ListNode& node) = delete;
+    ListNode* operator=(const ListNode* node) = delete;
+    ~ListNode() { (deleteNode()); }
 
     void deleteNode();
 
